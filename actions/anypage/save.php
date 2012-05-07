@@ -7,6 +7,8 @@ $page_path = get_input('page_path', null, false);
 $title = get_input('title', null, false);
 $description = get_input('description', null, false);
 $use_view = get_input('use_view');
+$visible_through_walled_garden = get_input('visible_through_walled_garden', false);
+$requires_login = get_input('requires_login', false);
 $guid = get_input('guid');
 
 elgg_make_sticky_form('anypage');
@@ -41,6 +43,8 @@ $page->setPagePath($page_path);
 $page->title = $title;
 $page->description = $description;
 $page->setUseView($use_view);
+$page->setRequiresLogin($requires_login);
+$page->setVisibleThroughWalledGarden($visible_through_walled_garden);
 
 if ($page->save()) {
 	elgg_clear_sticky_form('anypage');

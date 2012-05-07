@@ -1,6 +1,10 @@
 <?php
 /**
  * AnyPage page
+ *
+ * Access handled by setRequiresLogin() instead of access_id to allow proper redirects instead of
+ * 404 errors.
+ *
  */
 class AnyPage extends ElggObject {
 	/**
@@ -88,6 +92,44 @@ class AnyPage extends ElggObject {
 	 */
 	public function getURL() {
 		return elgg_normalize_url($this->getPagePath());
+	}
+
+	/**
+	 * Set if this page is visible though walled gardens
+	 *
+	 * @param bool $visible
+	 * @return bool
+	 */
+	public function setVisibleThroughWalledGarden($visible = true) {
+		return $this->visible_through_walled_garden = (bool)$visible;
+	}
+
+	/**
+	 * Is this page visible through walled gardens?
+	 *
+	 * @return bool
+	 */
+	public function isVisibleThroughWalledGarden() {
+		return $this->visible_through_walled_garden;
+	}
+
+	/**
+	 * Set if this page requires a login.
+	 *
+	 * @param type $requires
+	 * @return type
+	 */
+	public function setRequiresLogin($requires = false) {
+		return $this->requires_login = (bool)$requires;
+	}
+
+	/**
+	 * Does this page require a login?
+	 * 
+	 * @return bool
+	 */
+	public function requiresLogin() {
+		return $this->requires_login;
 	}
 
 	/**
@@ -185,6 +227,28 @@ class AnyPage extends ElggObject {
 		return $entities[0];
 	}
 
+	/**
+	 * Returns paths for pages marked as public through walled garden
+	 *
+	 * @param string $path
+	 * @return mixed AnyPage entity or false
+	 */
+	public static function getPathsVisibleThroughWalledGarden() {
+		$entities = elgg_get_entities_from_metadata(array(
+			'type' => 'object',
+			'subtype' => 'anypage',
+			'metadata_name' => 'visible_through_walled_garden',
+			'metadata_value' => '1'
+		));
+
+		$paths = array();
+		foreach ($entities as $page) {
+			$paths[] = $page->getPagePath();
+		}
+
+		return $paths;
+	}
+	
 	/**
 	 * Check if the first segment of a path would fail Elgg's default rewrite rules,
 	 * which only support a-z0-9_-

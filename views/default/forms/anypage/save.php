@@ -7,6 +7,8 @@ extract($vars);
 $desc_class = $use_view ? 'class="hidden"' : '';
 $view_info_class = $use_view ? '' : 'class="hidden"';
 $use_view_checked = $use_view ? 'checked="checked"' : '';
+$visible_check = $visible_through_walled_garden ? 'checked="checked"' : '';
+$requires_login_check = $requires_login ? 'checked="checked"' : '';
 
 ?>
 <div>
@@ -44,8 +46,24 @@ $use_view_checked = $use_view ? 'checked="checked"' : '';
 
 <div>
 	<label>
+<?php if (elgg_get_config('walled_garden')) { ?>
+		<?php
+			echo elgg_echo('anypage:visible_through_walled_garden');
+		?>
+		<input type="checkbox" name="visible_through_walled_garden" value="1" <?php echo $visible_check; ?> />
+<?php } else { ?>
+		<?php
+			echo elgg_echo('anypage:requires_login');
+		?>
+		<input type="checkbox" name="requires_login" value="1" <?php echo $requires_login_check; ?> />
+<?php } ?>
+	</label>
+</div>
+
+<div>
+	<label>
 	<?php
-	echo elgg_echo('anypage:use_view');
+		echo elgg_echo('anypage:use_view');
 	?>
 	<input type="checkbox" id="anypage-use-view" name="use_view" value="1" <?php echo $use_view_checked; ?> />
 	</label>

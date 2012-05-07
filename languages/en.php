@@ -24,6 +24,8 @@ $english = array(
 	'anypage:use_view' => 'Use a view',
 	'anypage:view_info' => 'This page will use the following view:',
 	'anypage:body' => 'Page body',
+	'anypage:visible_through_walled_garden' => 'Visible through Walled Garden',
+	'anypage:requires_login' => 'Requires login',
 
 	// actions
 	'anypage:save:success' => 'Saved page',

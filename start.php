@@ -1,8 +1,6 @@
 <?php
 /**
  * Anypage
- *
- * @todo Expose for Walled Garden sites
  */
 
 elgg_register_event_handler('init', 'system', 'anypage_init');
@@ -24,8 +22,18 @@ function anypage_init() {
 
 //	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
 	elgg_register_plugin_hook_handler('forward', '404', 'anypage_router', -1);
+	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'anypage_walled_garden_public_pages');
 }
 
+/**
+ * Select the right menu entry for admin section
+ *
+ * @param type $hook
+ * @param type $type
+ * @param type $value
+ * @param type $params
+ * @return null
+ */
 function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
 	if (!(elgg_in_context('admin') && elgg_in_context('anypage'))) {
 		return null;
@@ -43,8 +51,6 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
 				}
 				break;
 			}
-//			var_dump($item->getID());
-//			$t = new ElggMenuItem();
 		}
 	}
 }
@@ -69,6 +75,10 @@ function anypage_router($hook, $type, $value, $params) {
 	$page = AnyPage::getAnyPageEntityFromPath($path);
 	if (!$page) {
 		return;
+	}
+
+	if ($page->requiresLogin()) {
+		gatekeeper();
 	}
 
 	if ($page->usesView()) {
@@ -96,6 +106,8 @@ function anypage_prepare_form_vars($page = null) {
 		'page_path' => '',
 		'description' => '',
 		'use_view' => false,
+		'visible_through_walled_garden' => false,
+		'requires_login' => 'false',
 		'guid' => null,
 		'entity' => $page,
 	);
@@ -118,4 +130,27 @@ function anypage_prepare_form_vars($page = null) {
 	elgg_clear_sticky_form('anypage');
 
 	return $values;
+}
+
+/**
+ * Registers pages visible through walled garden with public pages
+ *
+ * @param type $hook
+ * @param type $type
+ * @param type $value
+ * @param type $params
+ * @return type
+ */
+function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
+	$paths_tmp = AnyPage::getPathsVisibleThroughWalledGarden();
+	$paths_tmp = array_map('preg_quote', $paths_tmp);
+	// the return value expect no leading slash. blarg
+
+	$paths = array();
+	foreach ($paths_tmp as $path) {
+		$paths[] = ltrim($path, '/');
+	}
+
+	$value = array_merge($value, $paths);
+	return $value;
 }
