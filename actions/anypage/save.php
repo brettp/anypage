@@ -19,8 +19,9 @@ if (!$page_path) {
 	forward(REFERER);
 }
 
-if (AnyPage::hasPageHandlerConflict($page_path)) {
-	register_error(elgg_echo('anypage:page_handler_conflict'));
+// check for description or using a view
+if (!$description && !$use_view) {
+	register_error(elgg_echo('anypage:no_description_or_view'));
 	forward(REFERER);
 }
 

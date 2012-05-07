@@ -29,12 +29,20 @@ $requires_login_check = $requires_login ? 'checked="checked"' : '';
 		'value' => $page_path,
 		'id' => 'anypage-path'
 	));
-	// add notice if there is an unsupported character
+	// add warning if there is an unsupported character
 	if ($entity && $entity->hasUnsupportedPageHandlerCharacter($entity->getPagePath())) {
 		$module_title = elgg_echo('anypage:warning');
 		$msg = elgg_echo('anypage:unsupported_page_handler_character');
-		echo elgg_view_module('info', $module_title, $msg, array('class' => 'pvm elgg-message elgg-state-error'));
+		echo elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
 	}
+
+	// add warning if there is a page handler conflict
+	if (AnyPage::hasPageHandlerConflict($entity->getPagePath())) {
+		$module_title = elgg_echo('anypage:warning');
+		$msg = elgg_echo('anypage:page_handler_conflict');
+		echo elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
+	}
+
 	echo elgg_echo('anypage:path_full_link') . ': ';
 	echo elgg_view('output/url', array(
 		'href' => $entity ? $entity->getPagePath() : '',

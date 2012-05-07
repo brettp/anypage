@@ -13,6 +13,9 @@ $english = array(
 		. "numbers, _, and - in paths before a /. Example: /test/page.html works but /page.html doesn't. <br /><br />"
 		. "If you are using Apache and Elgg's default rewrite rules, this page will not work!."
 	,
+
+	'anypage:page_handler_conflict' => 'The path you entered conflicts with a core or built-in page handler '
+		. 'and could cause unexpected behavior. Only keep this path if you know what you are doing.',
 	
 	'anypage:new' => 'New Page',
 	'anypage:no_pages' => 'You have not created any pages yet. Click the "New Page" link above to add a page.',
@@ -31,7 +34,7 @@ $english = array(
 	'anypage:save:success' => 'Saved page',
 	'anypage:delete:success' => 'Page deleted',
 	'anypage:no_path' => 'You must enter a path',
-	'anypage:page_handler_conflict' => 'The path you entered is already in use by a plugin.',
+	'anypage:no_description_or_view' => 'You must enter a page body or check the "Use view" option.',
 	'anypage:any_page_handler_conflict' => 'The path you entered is already registered to a page.',
 	'anypage:delete:failed' => 'Could not delete page.',
 

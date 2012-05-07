@@ -19,9 +19,9 @@ function anypage_init() {
 	elgg_register_action('anypage/delete', "$actions/delete.php", 'admin');
 
 	elgg_extend_view('js/elgg', 'anypage/js');
+	elgg_extend_view('css/admin', 'anypage/admin_css');
 
-//	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
-	elgg_register_plugin_hook_handler('forward', '404', 'anypage_router', -1);
+	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'anypage_walled_garden_public_pages');
 }
 
@@ -64,13 +64,10 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
  * @param $params
  */
 function anypage_router($hook, $type, $value, $params) {
-	$url = elgg_extract('current_url', $params);
-	$path = AnyPage::normalizePath(str_replace(elgg_get_site_url(), '', $url));
-
-//	$handler = elgg_extract('handler', $value);
-//	$pages = elgg_extract('segments', $value, array());
-//	array_unshift($pages, $handler);
-//	$page = implode('/', $pages);
+	$handler = elgg_extract('handler', $value);
+	$pages = elgg_extract('segments', $value, array());
+	array_unshift($pages, $handler);
+	$path = AnyPage::normalizePath(implode('/', $pages));
 
 	$page = AnyPage::getAnyPageEntityFromPath($path);
 	if (!$page) {
