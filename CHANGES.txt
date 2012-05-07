@@ -1,0 +1,12 @@
+Version 1.1
+(May 6th, 2012 from https://github.com/brettp/anypage)
+
+ Enhancements:
+  * Can specify pages require a login or are visible through walled gardens.
+  * Can register a conflicting page handler.
+  * CSS improvements for warning message.
+
+Version 1.0
+(May 3rd, 2012 from https://github.com/brettp/anypage)
+
+ Initial release.
