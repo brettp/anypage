@@ -107,7 +107,7 @@ function anypage_prepare_form_vars($page = null) {
 		'description' => '',
 		'use_view' => false,
 		'visible_through_walled_garden' => false,
-		'requires_login' => 'false',
+		'requires_login' => false,
 		'guid' => null,
 		'entity' => $page,
 	);
