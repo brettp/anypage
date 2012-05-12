@@ -1,3 +1,8 @@
+Version 1.2
+(??? from https://github.com/brettp/anypage)
+  * Fixed WSOD when creating a new page.
+  * Removed activate on install because it was breaking Elgg install.
+
 Version 1.1
 (May 6th, 2012 from https://github.com/brettp/anypage)
 
