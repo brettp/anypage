@@ -270,10 +270,11 @@ class AnyPage extends ElggObject {
 	/**
 	 * Returns rendered HTML for any path conflicts.
 	 *
-	 * @param string $path
+	 * @param string  $path
+	 * @param AnyPage $page An AnyPage object that will be ignored when checking for conflicts.
 	 * @return string Rendered HTML.
 	 */
-	public static function viewPathConflicts($path) {
+	public static function viewPathConflicts($path, $page = null) {
 		$return = '';
 		// add warning if there is an unsupported character
 		if (AnyPage::hasUnsupportedPageHandlerCharacter($path)) {
@@ -286,6 +287,17 @@ class AnyPage extends ElggObject {
 		if (AnyPage::hasPageHandlerConflict($path)) {
 			$module_title = elgg_echo('anypage:warning');
 			$msg = elgg_echo('anypage:page_handler_conflict');
+			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
+		}
+
+		if (AnyPage::hasAnyPageConflict($path, $page)) {
+			$module_title = elgg_echo('anypage:warning');
+			$conflicting_page = AnyPage::getAnyPageEntityFromPath($path);
+			$link = elgg_view('output/url', array(
+				'href' => "admin/appearance/anypage?guid=$conflicting_page->guid",
+				'text' => $conflicting_page->title
+			));
+			$msg = elgg_echo('anypage:anypage_conflict', array($link));
 			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
 		}
 

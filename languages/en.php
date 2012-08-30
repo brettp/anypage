@@ -4,7 +4,7 @@
  */
 
 $english = array(
-	'admin:appearance:anypage' => 'Anypage Pages',
+	'admin:appearance:anypage' => 'AnyPage Pages',
 	'admin:appearance:anypage:new' => 'New Page',
 
 	'anypage:warning' => 'Warning',
@@ -14,8 +14,10 @@ $english = array(
 		. "If you are using Apache and Elgg's default rewrite rules, this page will not work!."
 	,
 
-	'anypage:page_handler_conflict' => 'The path you entered conflicts with a core or built-in page handler '
+	'anypage:page_handler_conflict' => 'This path conflicts with a built-in Elgg page '
 		. 'and could cause unexpected behavior. Only keep this path if you know what you are doing.',
+
+	'anypage:anypage_conflict' => 'This path conflicts with the AnyPage page "%s". Click its title to view, edit, or delete that page.',
 	
 	'anypage:new' => 'New Page',
 	'anypage:no_pages' => 'You have not created any pages yet. Click the "New Page" link above to add a page.',

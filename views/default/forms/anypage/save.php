@@ -31,9 +31,9 @@ $requires_login_check = $requires_login ? 'checked="checked"' : '';
 	));
 
 	// display any path conflicts
-	?><div class = "anypage-notices"><?php
+	?><div id="anypage-notice"><?php
 	if ($entity) {
-		echo AnyPage::viewPathConflicts($entity->getPagePath());
+		echo AnyPage::viewPathConflicts($entity->getPagePath(), $entity);
 	}
 	?></div><?php
 

@@ -48,11 +48,24 @@ elgg.anypage.updatePath = function() {
 	$('span.anypage-updates-on-path-change').html(val);
 }
 
+/**
+ * Normalizes and checks path for conflicts or invalid chars.
+ */
 elgg.anypage.checkPath = function() {
+	var $pathInput = $(this);
 	elgg.action('anypage/check_path', {
-		data: {'path': $(this).val()},
+		data: {
+			'path': $pathInput.val(),
+			'page_guid': $pathInput.parents('form').find('guid').val()
+		},
 		success: function(json) {
-			console.log(json);
+			$pathInput.val(json.output.normalized_path);
+			
+			if (json.output.valid) {
+				$('#anypage-notice').html('').hide();
+			} else {
+				$('#anypage-notice').show().html(json.output.html);
+			}
 		}
 	});
 }

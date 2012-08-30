@@ -1,6 +1,8 @@
 Version 1.3
 (??? from https://github.com/brettp/anypage)
-  *
+  * Added live path checking.
+  * Cleaned up some language strings.
+  * 
 
 Version 1.2
 (May 14, 2012 from https://github.com/brettp/anypage)
