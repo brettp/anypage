@@ -134,6 +134,25 @@ class AnyPage extends ElggObject {
 	}
 
 	/**
+	 * Set if a link to this page should be shown in the footer menu.
+	 *
+	 * @param bool $show
+	 * @return bool
+	 */
+	public function setShowInFooter($show = false) {
+		return $this->show_in_footer = $show;
+	}
+
+	/**
+	 * Should a link to this page be added to the footer menu?
+	 *
+	 * @return type bool
+	 */
+	public function showInFooter() {
+		return $this->show_in_footer;
+	}
+
+	/**
 	 * Does $path conflict with a registered page handler?
 	 *
 	 * Path is normalized.

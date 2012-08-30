@@ -2,7 +2,8 @@ Version 1.3
 (??? from https://github.com/brettp/anypage)
   * Added live path checking.
   * Cleaned up some language strings.
-  * 
+  * Added "Show in footer."
+  * Moved check boxes to the left side of their labels.
 
 Version 1.2
 (May 14, 2012 from https://github.com/brettp/anypage)

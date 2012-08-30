@@ -24,6 +24,11 @@ function anypage_init() {
 
 	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'anypage_walled_garden_public_pages');
+
+	// add marked pages to footer menu
+	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
+
+	// composer
 }
 
 /**
@@ -106,6 +111,7 @@ function anypage_prepare_form_vars($page = null) {
 		'use_view' => false,
 		'visible_through_walled_garden' => false,
 		'requires_login' => false,
+		'show_in_footer' => false,
 		'guid' => null,
 		'entity' => $page,
 	);
@@ -150,5 +156,29 @@ function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
 	}
 
 	$value = array_merge($value, $paths);
+	return $value;
+}
+
+/**
+ * Add links to any registered pages to the footer menu.
+ *
+ * @param type $hook
+ * @param type $type
+ * @param type $value
+ * @param type $params
+ */
+function anypage_prepare_footer_menu($hook, $type, $value, $params) {
+	$pages = elgg_get_entities_from_metadata(array(
+		'type' => 'object',
+		'subtype' => 'anypage',
+		'metadata_name' => 'show_in_footer',
+		'metadata_value' => true
+	));
+
+	foreach ($pages as $page) {
+		$item = new ElggMenuItem($page->guid, $page->title, $page->getURL());
+		$value[] = $item;
+	}
+
 	return $value;
 }

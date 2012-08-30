@@ -31,6 +31,7 @@ $english = array(
 	'anypage:body' => 'Page body',
 	'anypage:visible_through_walled_garden' => 'Visible through Walled Garden',
 	'anypage:requires_login' => 'Requires login',
+	'anypage:show_in_footer' => 'Add a link in the site footer',
 
 	// actions
 	'anypage:save:success' => 'Saved page',
