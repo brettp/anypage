@@ -8,15 +8,21 @@
 elgg.provide('elgg.anypage');
 
 elgg.anypage.init = function() {
-	$('#anypage-use-view').change(function() {
+	$('#anypage-render-type').change(function() {
 		var $this = $(this);
 
-		if ($this.is(":checked")) {
-			$('#anypage-description').hide();
+		if ($this.val() == 'view') {
 			$('#anypage-view-info').show();
-		} else {
-			$('#anypage-description').show();
+			$('#anypage-description').hide();
+			$('#anypage-composer').hide();
+		} else if ($this.val() == 'html') {
 			$('#anypage-view-info').hide();
+			$('#anypage-description').show();
+			$('#anypage-composer').hide();
+		} else if ($this.val() == 'composer') {
+			$('#anypage-view-info').hide();
+			$('#anypage-description').hide();
+			$('#anypage-composer').show();
 		}
 	});
 
@@ -56,7 +62,7 @@ elgg.anypage.checkPath = function() {
 	elgg.action('anypage/check_path', {
 		data: {
 			'path': $pathInput.val(),
-			'page_guid': $pathInput.parents('form').find('guid').val()
+			'guid': $pathInput.parents('form').find('input[name=guid]').val()
 		},
 		success: function(json) {
 			$pathInput.val(json.output.normalized_path);

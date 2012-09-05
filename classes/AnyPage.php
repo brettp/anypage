@@ -8,6 +8,9 @@
  *
  */
 class AnyPage extends ElggObject {
+	private $renderTypes = array(
+		'view', 'html', 'composer'
+	);
 
 	/**
 	 * Set subclass.
@@ -54,36 +57,40 @@ class AnyPage extends ElggObject {
 	}
 
 	/**
-	 * Sets if this page should use a view instead of the built in object display.
-	 * 
-	 * @param bool $use_view
-	 * @return bool
-	 */
-	public function setUseView($use_view = false) {
-		return $this->use_view = (bool) $use_view;
-	}
-
-	/**
-	 * Returns if this page uses a view.
-	 *
-	 * @return bool
-	 */
-	public function usesView() {
-		return (bool) $this->use_view;
-	}
-
-	/**
 	 * Returns the view for this page.
 	 *
 	 * Currently only magic views are supported as anypage/<view_name>
 	 * @return mixed False if not set to use a view, else the view name as a string
 	 */
 	public function getView() {
-		if (!$this->use_view) {
+		if ($this->getRenderType() != 'view') {
 			return false;
 		}
 
 		return 'anypage' . $this->getPagePath();
+	}
+
+	/**
+	 * Sets the render type for the page. One of html, view, or composer.
+	 *
+	 * @param string $type The render type
+	 * @return bool
+	 */
+	public function setRenderType($type) {
+		if (!in_array($type, $this->renderTypes)) {
+			return false;
+		}
+		
+		return $this->render_type = $type;
+	}
+
+	/**
+	 * How should this page be rendered?
+	 *
+	 * @return One of view, html, or composer
+	 */
+	public function getRenderType() {
+		return $this->render_type;
 	}
 
 	/**
@@ -295,20 +302,22 @@ class AnyPage extends ElggObject {
 	 */
 	public static function viewPathConflicts($path, $page = null) {
 		$return = '';
-		// add warning if there is an unsupported character
+
+		// unsupported characters
 		if (AnyPage::hasUnsupportedPageHandlerCharacter($path)) {
 			$module_title = elgg_echo('anypage:warning');
 			$msg = elgg_echo('anypage:unsupported_page_handler_character');
 			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
 		}
 
-		// add warning if there is a page handler conflict
+		// page handler conflict
 		if (AnyPage::hasPageHandlerConflict($path)) {
 			$module_title = elgg_echo('anypage:warning');
 			$msg = elgg_echo('anypage:page_handler_conflict');
 			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
 		}
 
+		// any page conflict
 		if (AnyPage::hasAnyPageConflict($path, $page)) {
 			$module_title = elgg_echo('anypage:warning');
 			$conflicting_page = AnyPage::getAnyPageEntityFromPath($path);
@@ -321,5 +330,35 @@ class AnyPage extends ElggObject {
 		}
 
 		return $return;
+	}
+
+
+	/**
+	 * Deprecated methods 1.3
+	 */
+
+	/**
+	 * Sets if this page should use a view instead of the built in object display.
+	 *
+	 * @param bool $use_view
+	 * @return bool
+	 * @deprecated 1.3 Use setRenderType('view') or ('html')
+	 */
+	public function setUseView($use_view = false) {
+		if ($use_view) {
+			return $this->setRenderType('view');
+		} else {
+			return $this->setRenderType('html');
+		}
+	}
+
+	/**
+	 * Returns if this page uses a view.
+	 *
+	 * @return bool
+	 * @deprecated 1.3 Use 'getRenderType() === 'view'
+	 */
+	public function usesView() {
+		return $this->getRenderType() == 'view';
 	}
 }

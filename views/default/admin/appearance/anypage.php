@@ -11,6 +11,20 @@ if ($page_guid && !elgg_instanceof($page, 'object', 'anypage')) {
 	forward(REFERER, 404);
 }
 
+if (anypage_needs_upgrade()) {
+	$title = elgg_echo('anypage:needs_upgrade');
+	$body = elgg_echo('anypage:needs_upgrade_body');
+	$body .= elgg_view('output/url', array(
+		'href' => 'upgrade.php',
+		'text' => elgg_echo('anypage:upgrade_now')
+	));
+
+	echo elgg_view_module('info', $title, $body, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
+
+	// don't show the pages because they will probably be wrong.
+	return true;
+}
+
 if (!$page_guid) {
 	// default to first page if it exists
 	$pages = elgg_get_entities(array(

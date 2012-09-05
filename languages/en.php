@@ -22,22 +22,29 @@ $english = array(
 	'anypage:new' => 'New Page',
 	'anypage:no_pages' => 'You have not created any pages yet. Click the "New Page" link above to add a page.',
 
+	'anypage:needs_upgrade' => 'AnyPage Upgrade Required',
+	'anypage:needs_upgrade_body' => 'AnyPage requires an upgrade. ',
+	'anypage:upgrade_now' => 'Upgrade now.',
+
 	// form
 	'anypage:path' => 'Page path',
 	'anypage:path_full_link' => 'Full link',
-	'anypage:use_view' => 'Use a view',
-	'anypage:use_view' => 'Use a view',
 	'anypage:view_info' => 'This page will use the following view:',
 	'anypage:body' => 'Page body',
 	'anypage:visible_through_walled_garden' => 'Visible through Walled Garden',
 	'anypage:requires_login' => 'Requires login',
 	'anypage:show_in_footer' => 'Add a link in the site footer',
 
+	'anypage:use_view' => 'Display a custom view',
+	'anypage:use_editor' => 'Use an editor to write this page',
+	'anypage:use_composer' => 'Use the composer to build this page',
+
 	// actions
 	'anypage:save:success' => 'Saved page',
 	'anypage:delete:success' => 'Page deleted',
 	'anypage:no_path' => 'You must enter a path',
-	'anypage:no_description_or_view' => 'You must enter a page body or check the "Use view" option.',
+	'anypage:no_view' => 'You must enter a view.',
+	'anypage:no_description' => 'You must enter a page body.',
 	'anypage:any_page_handler_conflict' => 'The path you entered is already registered to a page.',
 	'anypage:delete:failed' => 'Could not delete page.',
 

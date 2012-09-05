@@ -2,10 +2,15 @@
 /**
  * Anypage
  *
+ * Set version
  * Register classes
  * Add example pages
  * Add admin notice
  */
+
+if (!elgg_get_plugin_setting('version', 'anypage')) {
+	elgg_set_plugin_setting('version', '2012083000');
+}
 
 if (get_subtype_id('object', 'anypage')) {
 	update_subtype('object', 'anypage', 'AnyPage');
@@ -24,7 +29,7 @@ if (!$count) {
 	$page = new AnyPage();
 	$page->title = elgg_echo('anypage:example:view:title');
 	$page->setPagePath('/example/test_view');
-	$page->setUseView(true);
+	$page->setRenderType('view');
 	$page->save();
 
 	$page = new AnyPage();

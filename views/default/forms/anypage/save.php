@@ -74,9 +74,17 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 
 <div>
 	<label>
-	<input type="checkbox" id="anypage-use-view" name="use_view" value="1" <?php echo $use_view_checked; ?> />
 	<?php
-		echo elgg_echo('anypage:use_view');
+		echo elgg_view('input/dropdown', array(
+			'name' => 'render_type',
+			'id' => 'anypage-render-type',
+			'options_values' => array(
+				'html' => elgg_echo('anypage:use_editor'),
+				'view' => elgg_echo('anypage:use_view'),
+//				'composer' => elgg_echo('anypage:use_composer'),
+			),
+			'value' => $render_type
+		));
 	?>
 	</label>
 </div>
@@ -100,6 +108,7 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 	));
 	?>
 </div>
+
 <div class="elgg-foot">
 <?php
 

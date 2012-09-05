@@ -25,6 +25,8 @@ function anypage_init() {
 	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'anypage_walled_garden_public_pages');
 
+	elgg_register_event_handler('upgrade', 'system', 'anypage_upgrader');
+
 	// add marked pages to footer menu
 	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
 
@@ -84,7 +86,7 @@ function anypage_router($hook, $type, $value, $params) {
 		gatekeeper();
 	}
 
-	if ($page->usesView()) {
+	if ($page->getRenderType() === 'view') {
 		// route to view
 		echo elgg_view($page->getView());
 		exit;
@@ -181,4 +183,50 @@ function anypage_prepare_footer_menu($hook, $type, $value, $params) {
 	}
 
 	return $value;
+}
+
+/**
+ * Runs all upgrades in /upgrades/ dir.
+ *
+ * @return void
+ */
+function anypage_upgrader() {
+	$db_version = elgg_get_plugin_setting('version', 'anypage');
+	include dirname(__FILE__) . '/version.php';
+	
+	if ($db_version && ($db_version >= $version)) {
+		return;
+	}
+
+	$path = dirname(__FILE__) . '/upgrades/';
+	$files = elgg_get_upgrade_files($path);
+
+	foreach ($files as $file) {
+		$file_version = elgg_get_upgrade_file_version($file);
+
+		if ($file_version <= $db_version) {
+			continue;
+		}
+
+		if (include "$path{$file}") {
+			elgg_set_plugin_setting('version', $file_version, 'anypage');
+		}
+	}
+}
+
+/**
+ * Does AnyPage need an upgrade?
+ *
+ * @return bool
+ */
+function anypage_needs_upgrade() {
+	include dirname(__FILE__) . '/version.php';
+
+	$db_version = elgg_get_plugin_setting('version', 'anypage');
+	
+	if (!$db_version) {
+		return true;
+	}
+
+	return $version > $db_version;
 }
