@@ -4,11 +4,14 @@
  */
 
 extract($vars);
-$desc_class = $use_view ? 'class="hidden"' : '';
-$view_info_class = $use_view ? '' : 'class="hidden"';
-$use_view_checked = $use_view ? 'checked="checked"' : '';
+
+$desc_class = $render_type != 'html' ? 'class="hidden"' : '';
+$view_info_class = $render_type != 'view' ? 'class="hidden"' : '';
+$composer_class = $render_type != 'composer' ? 'class="hidden"' : '';
+
 $visible_check = $visible_through_walled_garden ? 'checked="checked"' : '';
 $requires_login_check = $requires_login ? 'checked="checked"' : '';
+
 $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 
 ?>
@@ -81,7 +84,7 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 			'options_values' => array(
 				'html' => elgg_echo('anypage:use_editor'),
 				'view' => elgg_echo('anypage:use_view'),
-//				'composer' => elgg_echo('anypage:use_composer'),
+				'composer' => elgg_echo('anypage:use_composer'),
 			),
 			'value' => $render_type
 		));
@@ -107,6 +110,10 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 		'value' => $description
 	));
 	?>
+</div>
+
+<div id="anypage-composer" <?php echo $composer_class ;?>>
+
 </div>
 
 <div class="elgg-foot">
