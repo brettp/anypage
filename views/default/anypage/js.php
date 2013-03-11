@@ -15,20 +15,20 @@ elgg.anypage.init = function() {
 			case 'view':
 				$('#anypage-view-info').show();
 				$('#anypage-description').hide();
-				$('#anypage-composer').hide();
+//				$('#anypage-composer').hide();
 				break;
 
 			case 'html':
 				$('#anypage-view-info').hide();
 				$('#anypage-description').show();
-				$('#anypage-composer').hide();
+//				$('#anypage-composer').hide();
 				break;
-
-			case 'composer':
-				$('#anypage-view-info').hide();
-				$('#anypage-description').hide();
-				$('#anypage-composer').show();
-				break;
+//
+//			case 'composer':
+//				$('#anypage-view-info').hide();
+//				$('#anypage-description').hide();
+//				$('#anypage-composer').show();
+//				break;
 		}
 	});
 

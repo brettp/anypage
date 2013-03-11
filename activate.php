@@ -9,7 +9,7 @@
  */
 
 if (!elgg_get_plugin_setting('version', 'anypage')) {
-	elgg_set_plugin_setting('version', '2012083000');
+	elgg_set_plugin_setting('version', '2012083000', 'anypage');
 }
 
 if (get_subtype_id('object', 'anypage')) {

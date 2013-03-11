@@ -31,11 +31,11 @@ switch ($render_type) {
 		register_error(elgg_echo('anypage:no_view'));
 		forward(REFERER);
 		break;
-	
-	case 'composer':
-		register_error('todo');
-		forward(REFERER);
-		break;
+//	
+//	case 'composer':
+//		register_error('todo');
+//		forward(REFERER);
+//		break;
 
 	default:
 		register_error(elgg_echo('anypage:invalid_render_type'));

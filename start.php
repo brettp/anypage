@@ -29,8 +29,6 @@ function anypage_init() {
 
 	// add marked pages to footer menu
 	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
-
-	// composer
 }
 
 /**
@@ -223,7 +221,7 @@ function anypage_needs_upgrade() {
 	include dirname(__FILE__) . '/version.php';
 
 	$db_version = elgg_get_plugin_setting('version', 'anypage');
-	
+
 	if (!$db_version) {
 		return true;
 	}
