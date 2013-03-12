@@ -23,13 +23,15 @@ if (!$page_path) {
 // check renderer
 switch ($render_type) {
 	case 'html':
-		register_error(elgg_echo('anypage:no_description'));
-		forward(REFERER);
+		if (!$description) {
+			register_error(elgg_echo('anypage:no_description'));
+			forward(REFERER);
+		}
 		break;
 	
 	case 'view':
-		register_error(elgg_echo('anypage:no_view'));
-		forward(REFERER);
+//		register_error(elgg_echo('anypage:no_view'));
+//		forward(REFERER);
 		break;
 //	
 //	case 'composer':
