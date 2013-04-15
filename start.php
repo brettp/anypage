@@ -70,6 +70,7 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
  * @param $params
  */
 function anypage_router($hook, $type, $value, $params) {
+   if(!empty($value) && is_array($value)){
 	$handler = elgg_extract('handler', $value);
 	$pages = elgg_extract('segments', $value, array());
 	array_unshift($pages, $handler);
@@ -95,6 +96,7 @@ function anypage_router($hook, $type, $value, $params) {
 		echo elgg_view_page($page->title, $body);
 		exit;
 	}
+   }
 }
 
 /**
