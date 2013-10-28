@@ -6,6 +6,7 @@
 $english = array(
 	'admin:appearance:anypage' => 'AnyPage Pages',
 	'admin:appearance:anypage:new' => 'New Page',
+	'item:object:anypage' => 'Anypages',
 
 	'anypage:warning' => 'Warning',
 	'anypage:unsupported_page_handler_character' => "This path uses a character that is unsupported "
