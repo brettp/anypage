@@ -110,8 +110,6 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 	?>
 </div>
 
-</div>
-
 <div class="elgg-foot">
 <?php
 
