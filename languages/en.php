@@ -26,6 +26,7 @@ $english = array(
 	'anypage:needs_upgrade' => 'AnyPage Upgrade Required',
 	'anypage:needs_upgrade_body' => 'AnyPage requires an upgrade. ',
 	'anypage:upgrade_now' => 'Upgrade now.',
+	'anypage:upgrade_success' => 'Successfully updated AnyPages',
 
 	// form
 	'anypage:path' => 'Page path',
