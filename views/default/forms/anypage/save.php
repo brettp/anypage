@@ -5,11 +5,17 @@
 
 extract($vars);
 
+$is_walled_garden = elgg_get_config('walled_garden');
+
 $desc_class = $render_type != 'html' ? 'class="hidden"' : '';
 $view_info_class = $render_type != 'view' ? 'class="hidden"' : '';
 
 $visible_check = $visible_through_walled_garden ? 'checked="checked"' : '';
-$requires_login_check = $requires_login ? 'checked="checked"' : '';
+if ($is_walled_garden) {
+	$requires_login_check = 'checked="checked"';
+} else {
+	$requires_login_check = $requires_login ? 'checked="checked"' : '';
+}
 
 $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 
@@ -50,19 +56,33 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 </div>
 
 <div>
+<?php if ($is_walled_garden) { ?>
 	<label>
-<?php if (elgg_get_config('walled_garden')) { ?>
-		<input type="checkbox" name="visible_through_walled_garden" value="1" <?php echo $visible_check; ?> />
-		<?php
-			echo elgg_echo('anypage:visible_through_walled_garden');
-		?>
-<?php } else { ?>
-		<input type="checkbox" name="requires_login" value="1" <?php echo $requires_login_check; ?> />
-		<?php
-			echo elgg_echo('anypage:requires_login');
-		?>
-<?php } ?>
+		<input type="checkbox" name="visible_through_walled_garden"
+			   value="1" <?php echo $visible_check; ?> />
+		<?php echo elgg_echo('anypage:visible_through_walled_garden'); ?>
 	</label>
+	<br />
+
+	<label class="elgg-quiet">
+		<input type="checkbox" name="requires_login" value="1"
+			<?php echo $requires_login_check; ?> disabled="disabled"/>
+		<?php echo elgg_echo('anypage:requires_login'); ?>
+	</label>
+<?php } else { ?>
+	<label class="elgg-quiet">
+		<input type="checkbox" name="visible_through_walled_garden"
+			   value="1" <?php echo $visible_check; ?> disabled="disabled"/>
+		<?php echo elgg_echo('anypage:visible_through_walled_garden:disabled'); ?>
+	</label>
+	<br />
+
+	<label>
+		<input type="checkbox" name="requires_login" value="1"
+			<?php echo $requires_login_check; ?> />
+		<?php echo elgg_echo('anypage:requires_login'); ?>
+	</label>
+<?php } ?>
 </div>
 
 <div>

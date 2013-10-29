@@ -42,7 +42,12 @@ elgg.anypage.init = function() {
 		e.preventDefault();
 		window.open($(this).attr('href'));
 	});
-}
+
+	// walled garden / gatekeeper options
+	$('input[name=visible_through_walled_garden]').change(function(e) {
+		$('input[name=requires_login]:disabled').prop('checked', !$(e.target).prop('checked'));
+	});
+};
 
 elgg.anypage.updatePath = function() {
 	var $this = $(this);
@@ -58,7 +63,7 @@ elgg.anypage.updatePath = function() {
 		.attr('href', elgg.normalize_url(val))
 		.html(elgg.normalize_url(val));
 	$('span.anypage-updates-on-path-change').html(val);
-}
+};
 
 /**
  * Normalizes and checks path for conflicts or invalid chars.
@@ -80,6 +85,6 @@ elgg.anypage.checkPath = function() {
 			}
 		}
 	});
-}
+};
 
 elgg.register_hook_handler('init', 'system', elgg.anypage.init);

@@ -33,6 +33,7 @@ $english = array(
 	'anypage:view_info' => 'This page will use the following view:',
 	'anypage:body' => 'Page body',
 	'anypage:visible_through_walled_garden' => 'Visible through Walled Garden',
+	'anypage:visible_through_walled_garden:disabled' => 'Visible through Walled Garden (Walled Garden is not enabled)',
 	'anypage:requires_login' => 'Requires login',
 	'anypage:show_in_footer' => 'Add a link in the site footer',
 
