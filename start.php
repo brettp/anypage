@@ -70,6 +70,10 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
  * @param $params
  */
 function anypage_router($hook, $type, $value, $params) {
+	if (!$value) {
+		return;
+	}
+
 	$handler = elgg_extract('handler', $value);
 	$pages = elgg_extract('segments', $value, array());
 	array_unshift($pages, $handler);
