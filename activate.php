@@ -36,6 +36,8 @@ if (!$count) {
 	$page->title = elgg_echo('anypage:example:title');
 	$page->setPagePath('/anypage/example');
 	$page->description = elgg_echo('anypage:example_page:description');
+	$page->setRenderType('html');
+	$page->setLayout('one_column');
 	$page->save();
 
 	elgg_add_admin_notice('anypage', elgg_echo('anypage:activate:admin_notice',

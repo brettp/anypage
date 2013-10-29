@@ -9,6 +9,7 @@ $is_walled_garden = elgg_get_config('walled_garden');
 
 $desc_class = $render_type != 'html' ? 'class="hidden"' : '';
 $view_info_class = $render_type != 'view' ? 'class="hidden"' : '';
+$layout_class = $render_type == 'view' ? 'class="hidden"' : '';
 
 $visible_check = $visible_through_walled_garden ? 'checked="checked"' : '';
 if ($is_walled_garden) {
@@ -18,6 +19,8 @@ if ($is_walled_garden) {
 }
 
 $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
+
+$layout_options = AnyPage::getLayoutOptions();
 
 ?>
 <div>
@@ -110,6 +113,25 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 	</label>
 </div>
 
+<div id="anypage-layout" class="<?php echo $layout_class;?>">
+	<label>
+		<?php echo elgg_echo('anypage:layout'); ?>:
+
+		<?php
+			echo elgg_view('input/dropdown', array(
+				'options_values' => $layout_options,
+				'name' => 'layout',
+				'class' => 'anypage-layout',
+				'value' => $layout
+			));
+		?>
+
+		<span class="elgg-text-help elgg-quiet">
+			<?php echo elgg_echo('anypage:layout:help'); ?>
+		</span>
+	</label>
+</div>
+
 <div id="anypage-view-info" <?php echo $view_info_class;?>>
 	<p>
 	<?php
@@ -136,13 +158,16 @@ $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 if ($guid) {
 	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
 	echo elgg_view('output/confirmlink', array(
-		'class' => 'float-alt elgg-button elgg-button-action',
+		'class' => 'float elgg-button elgg-button-action',
 		'text' => elgg_echo('delete'),
 		'href' => 'action/anypage/delete?guid=' . $guid
 	));
 }
 
-echo elgg_view('input/submit', array('value' => elgg_echo("save")));
+echo elgg_view('input/submit', array(
+	'value' => elgg_echo("save"),
+	'class' => 'float-alt elgg-button elgg-button-action'
+	));
 
 ?>
 </div>

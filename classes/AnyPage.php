@@ -94,6 +94,28 @@ class AnyPage extends ElggObject {
 	}
 
 	/**
+	 * Set the layout for this page to use
+	 *
+	 * @param string $layout
+	 * @return bool
+	 */
+	public function setLayout($layout) {
+		if (!in_array($layout, $this->getLayouts())) {
+			return false;
+		}
+		return $this->layout = $layout;
+	}
+
+	/**
+	 * Return the layout to use for this page.
+	 *
+	 * @return string
+	 */
+	public function getLayout() {
+		return $this->layout;
+	}
+
+	/**
 	 * Gets the public facing URL for the page.
 	 * 
 	 * @return string
@@ -330,6 +352,75 @@ class AnyPage extends ElggObject {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * Returns layouts in an array of view => Pretty Name
+	 * Suitable for use in dropdown input views
+	 *
+	 */
+	public static function getLayoutOptions() {
+		$views = self::getLayouts();
+
+		// core views that don't work right
+		$ignored_views = array(
+			'two_column_left_sidebar',
+			'widgets',
+		);
+
+		$options = array();
+
+		foreach ($views as $view) {
+			if (!in_array($view, $ignored_views)) {
+				$options[$view] = ucwords(str_replace('_', ' ', $view));
+			}
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Return all valid layouts WITHOUT the page/layouts/ prefix.
+	 *
+	 * @global type $CONFIG
+	 * @return array
+	 */
+	public static function getLayouts() {
+		global $CONFIG;
+		
+		// some helper functions borrowed from the dev's mod
+		$view_list = array();
+
+		$dir = $CONFIG->viewpath . "default/page/layouts/";
+
+		$handle = opendir($dir);
+		while ($file = readdir($handle)) {
+			if ($file[0] != '.') {
+				$extension = strrchr(trim($file, "/"), '.');
+				
+				if ($extension === ".php") {
+					$view_list[] = $dir . $file;
+				}
+			}
+		}
+		closedir($handle);
+
+		// remove base path and php extension
+		array_walk($view_list, create_function('&$v,$k', 'global $CONFIG; $v = substr($v, strlen($CONFIG->viewpath . "default/"), -4);'));
+
+		$views = elgg_get_config('views');
+
+		function is_layout($view) {
+			return (0 === strpos($view, 'page/layouts'));
+		}
+
+		$plugin_layouts = array_filter(array_keys($views->locations['default']), 'is_layout');
+
+		$view_list = array_merge($plugin_layouts, $view_list);
+		array_walk($view_list, create_function('&$v,$k', '$v = str_replace("page/layouts/", "", $v);'));
+		sort($view_list);
+	
+		return $view_list;
 	}
 
 

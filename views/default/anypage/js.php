@@ -15,12 +15,14 @@ elgg.anypage.init = function() {
 			case 'view':
 				$('#anypage-view-info').show();
 				$('#anypage-description').hide();
+				$('#anypage-layout').hide();
 //				$('#anypage-composer').hide();
 				break;
 
 			case 'html':
 				$('#anypage-view-info').hide();
 				$('#anypage-description').show();
+				$('#anypage-layout').show();
 //				$('#anypage-composer').hide();
 				break;
 //

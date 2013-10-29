@@ -37,6 +37,8 @@ $english = array(
 	'anypage:visible_through_walled_garden:disabled' => 'Visible through Walled Garden (Walled Garden is not enabled)',
 	'anypage:requires_login' => 'Requires login',
 	'anypage:show_in_footer' => 'Add a link in the site footer',
+	'anypage:layout' => 'Layout',
+	'anypage:layout:help' => '(See the readme file for more information)',
 
 	'anypage:use_view' => 'Display a custom view',
 	'anypage:use_editor' => 'Use an editor to write this page',
