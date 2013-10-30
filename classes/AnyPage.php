@@ -410,11 +410,7 @@ class AnyPage extends ElggObject {
 
 		$views = elgg_get_config('views');
 
-		function is_layout($view) {
-			return (0 === strpos($view, 'page/layouts'));
-		}
-
-		$plugin_layouts = array_filter(array_keys($views->locations['default']), 'is_layout');
+		$plugin_layouts = array_filter(array_keys($views->locations['default']), create_function('$view', 'return (0 === strpos($view, "page/layouts"));'));
 
 		$view_list = array_merge($plugin_layouts, $view_list);
 		array_walk($view_list, create_function('&$v,$k', '$v = str_replace("page/layouts/", "", $v);'));

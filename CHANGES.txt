@@ -1,3 +1,7 @@
+Version 1.5.1
+(October 30, 2013 from https://github.com/brettp/anypage)
+  * Fixed error redeclaring a function.
+
 Version 1.5
 (October 29, 2013 from https://github.com/brettp/anypage)
   * Added ability to pick layout.
