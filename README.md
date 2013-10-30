@@ -1,4 +1,5 @@
-=Anypage=
+= Anypage =
+
 == Intro ==
 Add any page to your site. Admin users can define a page address. Pages can be populated
 by an editor or by the view anypage/page/name. Pages are always relative to

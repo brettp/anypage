@@ -1,3 +1,11 @@
+Version 1.5
+(October 29, 2013 from https://github.com/brettp/anypage)
+  * Added ability to pick layout.
+  * Added missing language strings.
+  * Clarified walled garden / require login options.
+  * Fixed errors logged errors.
+  * Fixed admin display.
+
 Version 1.4
 (March 12, 2013 from https://github.com/brettp/anypage)
   * Fixed page creation. Sorry!
