@@ -29,6 +29,10 @@ function anypage_init() {
 
 	// add marked pages to footer menu
 	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
+	
+	// Register for search
+	elgg_register_entity_type('object', 'anypage');
+
 }
 
 /**
