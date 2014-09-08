@@ -13,4 +13,4 @@ if (!$page) {
 	return;
 }
 
-echo $obj->description;
+echo $page->description;
