@@ -3,7 +3,7 @@
  * Anypage language
  */
 
-$english = array(
+return array(
 	'admin:appearance:anypage' => 'AnyPage Pages',
 	'admin:appearance:anypage:new' => 'New Page',
 	'item:object:anypage' => 'Anypages',
@@ -19,7 +19,7 @@ $english = array(
 		. 'and could cause unexpected behavior. Only keep this path if you know what you are doing.',
 
 	'anypage:anypage_conflict' => 'This path conflicts with the AnyPage page "%s". Click its title to view, edit, or delete that page.',
-	
+
 	'anypage:new' => 'New Page',
 	'anypage:no_pages' => 'You have not created any pages yet. Click the "New Page" link above to add a page.',
 
@@ -62,5 +62,3 @@ $english = array(
 
 	'anypage:activate:admin_notice' => 'AnyPage has added example pages. Use the <a href="%s">admin interface</a> to add more pages.',
 );
-
-add_translation('en', $english);
