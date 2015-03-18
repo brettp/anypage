@@ -13,4 +13,6 @@ if (!$page) {
 	return;
 }
 
-echo $page->description;
+echo elgg_view('output/longtext', array(
+	'value' => $page->description
+));
