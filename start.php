@@ -95,7 +95,10 @@ function anypage_router($hook, $type, $value, $params) {
 	} else {
 		// display entity
 		$content = elgg_view_entity($page);
-		$body = elgg_view_layout($page->getLayout(), array('content' => $content));
+		$body = elgg_view_layout($page->getLayout(), array(
+			'content' => $content,
+			'title' => $page->title,
+		));
 		echo elgg_view_page($page->title, $body);
 		exit;
 	}
@@ -196,7 +199,7 @@ function anypage_prepare_footer_menu($hook, $type, $value, $params) {
 function anypage_upgrader() {
 	$db_version = elgg_get_plugin_setting('version', 'anypage');
 	include dirname(__FILE__) . '/version.php';
-	
+
 	if ($db_version && ($db_version >= $version)) {
 		return;
 	}
