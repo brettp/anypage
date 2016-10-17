@@ -28,6 +28,9 @@ function anypage_init() {
 
 	// add marked pages to footer menu
 	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
+
+	// Register for search
+	elgg_register_entity_type('object', 'anypage');
 }
 
 /**
@@ -90,8 +93,17 @@ function anypage_router($hook, $type, $value, $params) {
 
 	if ($page->getRenderType() === 'view') {
 		// route to view
-		echo elgg_view($page->getView());
-		exit;
+		$content = elgg_view($page->getView());
+		if ($page->getLayout()) {
+			$body = elgg_view_layout($page->getLayout(), [
+				'content' => $content,
+				'title' => $page->title,
+			]);
+			echo elgg_view_page($page->title, $body);
+		} else {
+			echo $content;
+		}
+		return false;
 	} else {
 		// display entity
 		$content = elgg_view_entity($page);
@@ -100,7 +112,7 @@ function anypage_router($hook, $type, $value, $params) {
 			'title' => $page->title,
 		]);
 		echo elgg_view_page($page->title, $body);
-		exit;
+		return false;
 	}
 }
 
@@ -177,6 +189,8 @@ function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
  * @param type $type
  * @param type $value
  * @param type $params
+ *
+ * @return array
  */
 function anypage_prepare_footer_menu($hook, $type, $value, $params) {
 	$pages = elgg_get_entities_from_metadata([

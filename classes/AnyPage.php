@@ -108,7 +108,7 @@ class AnyPage extends ElggObject {
 	 * @return bool
 	 */
 	public function setLayout($layout) {
-		if (!in_array($layout, $this->getLayouts())) {
+		if ($layout && !in_array($layout, $this->getLayouts())) {
 			return false;
 		}
 
@@ -393,7 +393,7 @@ class AnyPage extends ElggObject {
 			'widgets',
 		];
 
-		$options = [];
+		$options = [''];
 
 		foreach ($views as $view) {
 			if (!in_array($view, $ignored_views)) {
