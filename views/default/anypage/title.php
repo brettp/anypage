@@ -13,10 +13,11 @@ $title = $page ? $page->title : "<!-- no content for path $path -->";
 
 if (empty($vars['as_heading'])) {
 	echo $title;
+
 	return;
 }
 
 ?>
 <div class="elgg-head clearfix">
-	<?php echo elgg_view_title($title, array('class' => 'elgg-heading-main')); ?>
+	<?php echo elgg_view_title($title, ['class' => 'elgg-heading-main']); ?>
 </div>

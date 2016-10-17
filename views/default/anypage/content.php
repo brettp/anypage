@@ -10,9 +10,10 @@ $path = $vars['path'];
 $page = AnyPage::getAnyPageEntityFromPath($path);
 if (!$page) {
 	echo "<!-- no content for path $path -->";
+
 	return;
 }
 
-echo elgg_view('output/longtext', array(
-	'value' => $page->description
-));
+echo elgg_view('output/longtext', [
+	'value' => $page->description,
+]);

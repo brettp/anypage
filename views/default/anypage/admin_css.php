@@ -1,3 +1,3 @@
 .anypage-message.elgg-message {
-	cursor: auto;
+cursor: auto;
 }

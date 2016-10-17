@@ -8,12 +8,15 @@
  *
  */
 class AnyPage extends ElggObject {
-	private $renderTypes = array(
-		'view', 'html', 'composer'
-	);
+	private $renderTypes = [
+		'view',
+		'html',
+		'composer',
+	];
 
 	/**
 	 * Set subclass.
+	 *
 	 * @return bool
 	 */
 	public function initializeAttributes() {
@@ -42,6 +45,7 @@ class AnyPage extends ElggObject {
 	 * Sets the path for this page. The path is normalized.
 	 *
 	 * @param string $path
+	 *
 	 * @return bool
 	 */
 	public function setPagePath($path) {
@@ -50,6 +54,7 @@ class AnyPage extends ElggObject {
 
 	/**
 	 * Returns the path for this page.
+	 *
 	 * @return string
 	 */
 	public function getPagePath() {
@@ -60,6 +65,7 @@ class AnyPage extends ElggObject {
 	 * Returns the view for this page.
 	 *
 	 * Currently only magic views are supported as anypage/<view_name>
+	 *
 	 * @return mixed False if not set to use a view, else the view name as a string
 	 */
 	public function getView() {
@@ -74,13 +80,14 @@ class AnyPage extends ElggObject {
 	 * Sets the render type for the page. One of html, view, or composer.
 	 *
 	 * @param string $type The render type
+	 *
 	 * @return bool
 	 */
 	public function setRenderType($type) {
 		if (!in_array($type, $this->renderTypes)) {
 			return false;
 		}
-		
+
 		return $this->render_type = $type;
 	}
 
@@ -97,12 +104,14 @@ class AnyPage extends ElggObject {
 	 * Set the layout for this page to use
 	 *
 	 * @param string $layout
+	 *
 	 * @return bool
 	 */
 	public function setLayout($layout) {
 		if (!in_array($layout, $this->getLayouts())) {
 			return false;
 		}
+
 		return $this->layout = $layout;
 	}
 
@@ -117,7 +126,7 @@ class AnyPage extends ElggObject {
 
 	/**
 	 * Gets the public facing URL for the page.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getURL() {
@@ -128,10 +137,11 @@ class AnyPage extends ElggObject {
 	 * Set if this page is visible though walled gardens
 	 *
 	 * @param bool $visible
+	 *
 	 * @return bool
 	 */
 	public function setVisibleThroughWalledGarden($visible = true) {
-		return $this->visible_through_walled_garden = (bool) $visible;
+		return $this->visible_through_walled_garden = (bool)$visible;
 	}
 
 	/**
@@ -146,16 +156,17 @@ class AnyPage extends ElggObject {
 	/**
 	 * Set if this page requires a login.
 	 *
-	 * @param type $requires
-	 * @return type
+	 * @param bool $requires
+	 *
+	 * @return bool
 	 */
 	public function setRequiresLogin($requires = false) {
-		return $this->requires_login = (bool) $requires;
+		return $this->requires_login = (bool)$requires;
 	}
 
 	/**
 	 * Does this page require a login?
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function requiresLogin() {
@@ -166,6 +177,7 @@ class AnyPage extends ElggObject {
 	 * Set if a link to this page should be shown in the footer menu.
 	 *
 	 * @param bool $show
+	 *
 	 * @return bool
 	 */
 	public function setShowInFooter($show = false) {
@@ -175,7 +187,7 @@ class AnyPage extends ElggObject {
 	/**
 	 * Should a link to this page be added to the footer menu?
 	 *
-	 * @return type bool
+	 * @return bool
 	 */
 	public function showInFooter() {
 		return $this->show_in_footer;
@@ -187,6 +199,7 @@ class AnyPage extends ElggObject {
 	 * Path is normalized.
 	 *
 	 * @param string $path
+	 *
 	 * @return boolean
 	 */
 	static function hasPageHandlerConflict($path) {
@@ -208,8 +221,9 @@ class AnyPage extends ElggObject {
 	 *
 	 * Path is normalized.
 	 *
-	 * @param string $path
+	 * @param string  $path
 	 * @param AnyPage $page
+	 *
 	 * @return bool
 	 */
 	static function hasAnyPageConflict($path, $page = null) {
@@ -220,6 +234,7 @@ class AnyPage extends ElggObject {
 		}
 
 		$paths = AnyPage::getRegisteredPagePaths();
+
 		return in_array($path, $paths);
 	}
 
@@ -227,6 +242,7 @@ class AnyPage extends ElggObject {
 	 * Normalize a path. Removes trailing /s. Adds leading /s.
 	 *
 	 * @param string $path
+	 *
 	 * @return string
 	 */
 	static function normalizePath($path) {
@@ -239,13 +255,15 @@ class AnyPage extends ElggObject {
 	 * @return array guid => path_name
 	 */
 	static function getRegisteredPagePaths() {
-		$entities = elgg_get_entities_from_metadata(array(
+		$entities = elgg_get_entities_from_metadata([
 			'type' => 'object',
 			'subtype' => 'anypage',
-			'limit' => 0
-				));
+			'limit' => 0,
+		]);
 
-		$paths = array();
+		$paths = [];
+
+		/* @var AnyPage $entity */
 		foreach ($entities as $entity) {
 			$paths[$entity->getGUID()] = $entity->getPagePath();
 		}
@@ -257,17 +275,18 @@ class AnyPage extends ElggObject {
 	 * Returns an AnyPage entity from its path
 	 *
 	 * @param string $path
-	 * @return mixed AnyPage entity or false
+	 *
+	 * @return \AnyPage|false entity or false
 	 */
 	public static function getAnyPageEntityFromPath($path) {
 		$path = AnyPage::normalizePath($path);
-		$entities = elgg_get_entities_from_metadata(array(
+		$entities = elgg_get_entities_from_metadata([
 			'type' => 'object',
 			'subtype' => 'anypage',
 			'metadata_name' => 'page_path',
 			'metadata_value' => $path,
-			'limit' => 1
-				));
+			'limit' => 1,
+		]);
 
 		if (!$entities) {
 			return false;
@@ -279,18 +298,18 @@ class AnyPage extends ElggObject {
 	/**
 	 * Returns paths for pages marked as public through walled garden
 	 *
-	 * @param string $path
-	 * @return mixed AnyPage entity or false
+	 * @return string[]
 	 */
 	public static function getPathsVisibleThroughWalledGarden() {
-		$entities = elgg_get_entities_from_metadata(array(
+		$entities = elgg_get_entities_from_metadata([
 			'type' => 'object',
 			'subtype' => 'anypage',
 			'metadata_name' => 'visible_through_walled_garden',
-			'metadata_value' => '1'
-				));
+			'metadata_value' => '1',
+		]);
 
-		$paths = array();
+		$paths = [];
+		/* @var AnyPage $page */
 		foreach ($entities as $page) {
 			$paths[] = $page->getPagePath();
 		}
@@ -303,6 +322,7 @@ class AnyPage extends ElggObject {
 	 * which only support a-z0-9_-
 	 *
 	 * @param string $path
+	 *
 	 * @return bool
 	 */
 	public static function hasUnsupportedPageHandlerCharacter($path) {
@@ -312,6 +332,7 @@ class AnyPage extends ElggObject {
 		$handler = array_shift($pages);
 
 		$regexp = '/[^A-Za-z0-9\_\-]/';
+
 		return preg_match($regexp, $handler);
 	}
 
@@ -320,6 +341,7 @@ class AnyPage extends ElggObject {
 	 *
 	 * @param string  $path
 	 * @param AnyPage $page An AnyPage object that will be ignored when checking for conflicts.
+	 *
 	 * @return string Rendered HTML.
 	 */
 	public static function viewPathConflicts($path, $page = null) {
@@ -329,26 +351,29 @@ class AnyPage extends ElggObject {
 		if (AnyPage::hasUnsupportedPageHandlerCharacter($path)) {
 			$module_title = elgg_echo('anypage:warning');
 			$msg = elgg_echo('anypage:unsupported_page_handler_character');
-			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
+			$return .= elgg_view_module('info', $module_title, $msg,
+				['class' => 'anypage-message pvm elgg-message elgg-state-error']);
 		}
 
 		// page handler conflict
 		if (AnyPage::hasPageHandlerConflict($path)) {
 			$module_title = elgg_echo('anypage:warning');
 			$msg = elgg_echo('anypage:page_handler_conflict');
-			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
+			$return .= elgg_view_module('info', $module_title, $msg,
+				['class' => 'anypage-message pvm elgg-message elgg-state-error']);
 		}
 
 		// any page conflict
 		if (AnyPage::hasAnyPageConflict($path, $page)) {
 			$module_title = elgg_echo('anypage:warning');
 			$conflicting_page = AnyPage::getAnyPageEntityFromPath($path);
-			$link = elgg_view('output/url', array(
+			$link = elgg_view('output/url', [
 				'href' => "admin/appearance/anypage?guid=$conflicting_page->guid",
-				'text' => $conflicting_page->title
-			));
-			$msg = elgg_echo('anypage:anypage_conflict', array($link));
-			$return .= elgg_view_module('info', $module_title, $msg, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
+				'text' => $conflicting_page->title,
+			]);
+			$msg = elgg_echo('anypage:anypage_conflict', [$link]);
+			$return .= elgg_view_module('info', $module_title, $msg,
+				['class' => 'anypage-message pvm elgg-message elgg-state-error']);
 		}
 
 		return $return;
@@ -363,12 +388,12 @@ class AnyPage extends ElggObject {
 		$views = self::getLayouts();
 
 		// core views that don't work right
-		$ignored_views = array(
+		$ignored_views = [
 			'two_column_left_sidebar',
 			'widgets',
-		);
+		];
 
-		$options = array();
+		$options = [];
 
 		foreach ($views as $view) {
 			if (!in_array($view, $ignored_views)) {
@@ -382,40 +407,25 @@ class AnyPage extends ElggObject {
 	/**
 	 * Return all valid layouts WITHOUT the page/layouts/ prefix.
 	 *
-	 * @global type $CONFIG
+	 * @global array $CONFIG
 	 * @return array
 	 */
 	public static function getLayouts() {
-		global $CONFIG;
-		
-		// some helper functions borrowed from the dev's mod
-		$view_list = array();
+		$s = _elgg_services()->views;
+		$view_list = [];
 
-		$dir = $CONFIG->viewpath . "default/page/layouts/";
-
-		$handle = opendir($dir);
-		while ($file = readdir($handle)) {
-			if ($file[0] != '.') {
-				$extension = strrchr(trim($file, "/"), '.');
-				
-				if ($extension === ".php") {
-					$view_list[] = $dir . $file;
-				}
+		$matches = null;
+		foreach ($s->listViews() as $view) {
+			// only match top-level layouts: page/layout/{whatever}
+			$search = "^page/layouts/([^/]+)$";
+			preg_match("|$search|i", $view, $matches);
+			if ($matches) {
+				$view_list[] = $matches[1];
 			}
 		}
-		closedir($handle);
 
-		// remove base path and php extension
-		array_walk($view_list, create_function('&$v,$k', 'global $CONFIG; $v = substr($v, strlen($CONFIG->viewpath . "default/"), -4);'));
-
-		$views = elgg_get_config('views');
-
-		$plugin_layouts = array_filter(array_keys($views->locations['default']), create_function('$view', 'return (0 === strpos($view, "page/layouts"));'));
-
-		$view_list = array_merge($plugin_layouts, $view_list);
-		array_walk($view_list, create_function('&$v,$k', '$v = str_replace("page/layouts/", "", $v);'));
 		sort($view_list);
-	
+
 		return $view_list;
 	}
 
@@ -428,6 +438,7 @@ class AnyPage extends ElggObject {
 	 * Sets if this page should use a view instead of the built in object display.
 	 *
 	 * @param bool $use_view
+	 *
 	 * @return bool
 	 * @deprecated 1.3 Use setRenderType('view') or ('html')
 	 */

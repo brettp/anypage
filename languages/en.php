@@ -3,7 +3,7 @@
  * Anypage language
  */
 
-return array(
+return [
 	'admin:appearance:anypage' => 'AnyPage Pages',
 	'admin:appearance:anypage:new' => 'New Page',
 	'item:object:anypage' => 'Anypages',
@@ -61,4 +61,4 @@ return array(
 	'anypage:test_page_view' => 'This is an example of a page rendered by AnyPage using a view!',
 
 	'anypage:activate:admin_notice' => 'AnyPage has added example pages. Use the <a href="%s">admin interface</a> to add more pages.',
-);
+];

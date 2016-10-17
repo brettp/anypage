@@ -3,11 +3,11 @@
  * Add a layout param
  */
 
-$options = array(
+$options = [
 	'type' => 'object',
 	'subtype' => 'anypage',
-	'limit' => 0
-);
+	'limit' => 0,
+];
 
 $batch = new ElggBatch('elgg_get_entities', $options);
 

@@ -19,7 +19,6 @@ function anypage_init() {
 	elgg_register_action('anypage/delete', "$actions/delete.php", 'admin');
 	elgg_register_action('anypage/check_path', "$actions/check_path.php", 'admin');
 
-	elgg_extend_view('js/elgg', 'anypage/js');
 	elgg_extend_view('css/admin', 'anypage/admin_css');
 
 	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
@@ -38,6 +37,7 @@ function anypage_init() {
  * @param type $type
  * @param type $value
  * @param type $params
+ *
  * @return null
  */
 function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
@@ -48,7 +48,7 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
 	if (isset($value['configure'])) {
 		foreach ($value['configure'] as $item) {
 			if ($item->getName() == 'appearance') {
-				foreach($item->getChildren() as $child) {
+				foreach ($item->getChildren() as $child) {
 					if ($child->getName() == 'appearance:anypage') {
 						$item->setSelected();
 						$child->setSelected();
@@ -75,7 +75,7 @@ function anypage_router($hook, $type, $value, $params) {
 	}
 
 	$handler = elgg_extract('handler', $value);
-	$pages = elgg_extract('segments', $value, array());
+	$pages = elgg_extract('segments', $value, []);
 	array_unshift($pages, $handler);
 	$path = AnyPage::normalizePath(implode('/', $pages));
 
@@ -95,10 +95,10 @@ function anypage_router($hook, $type, $value, $params) {
 	} else {
 		// display entity
 		$content = elgg_view_entity($page);
-		$body = elgg_view_layout($page->getLayout(), array(
+		$body = elgg_view_layout($page->getLayout(), [
 			'content' => $content,
 			'title' => $page->title,
-		));
+		]);
 		echo elgg_view_page($page->title, $body);
 		exit;
 	}
@@ -108,10 +108,11 @@ function anypage_router($hook, $type, $value, $params) {
  * Prepare form variables for page edit form.
  *
  * @param mixed $page
+ *
  * @return array
  */
 function anypage_prepare_form_vars($page = null) {
-	$values = array(
+	$values = [
 		'title' => '',
 		'page_path' => '',
 		'description' => '',
@@ -122,7 +123,7 @@ function anypage_prepare_form_vars($page = null) {
 		'layout' => 'one_column',
 		'guid' => null,
 		'entity' => $page,
-	);
+	];
 
 	if ($page) {
 		foreach (array_keys($values) as $field) {
@@ -151,6 +152,7 @@ function anypage_prepare_form_vars($page = null) {
  * @param type $type
  * @param type $value
  * @param type $params
+ *
  * @return type
  */
 function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
@@ -158,12 +160,13 @@ function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
 	$paths_tmp = array_map('preg_quote', $paths_tmp);
 	// the return value expect no leading slash. blarg
 
-	$paths = array();
+	$paths = [];
 	foreach ($paths_tmp as $path) {
 		$paths[] = ltrim($path, '/');
 	}
 
 	$value = array_merge($value, $paths);
+
 	return $value;
 }
 
@@ -176,12 +179,12 @@ function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
  * @param type $params
  */
 function anypage_prepare_footer_menu($hook, $type, $value, $params) {
-	$pages = elgg_get_entities_from_metadata(array(
+	$pages = elgg_get_entities_from_metadata([
 		'type' => 'object',
 		'subtype' => 'anypage',
 		'metadata_name' => 'show_in_footer',
-		'metadata_value' => true
-	));
+		'metadata_value' => true,
+	]);
 
 	foreach ($pages as $page) {
 		$item = new ElggMenuItem($page->guid, $page->title, $page->getURL());

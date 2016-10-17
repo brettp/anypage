@@ -1,7 +1,7 @@
 <?php
 /**
-* Elgg anypage save action
-*/
+ * Elgg anypage save action
+ */
 
 $page_path = get_input('page_path', null, false);
 $title = get_input('title', null, false);
@@ -29,7 +29,7 @@ switch ($render_type) {
 			forward(REFERER);
 		}
 		break;
-	
+
 	case 'view':
 //		register_error(elgg_echo('anypage:no_view'));
 //		forward(REFERER);
