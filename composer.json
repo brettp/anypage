@@ -4,5 +4,12 @@
     "require": {
         "composer/installers": ">=1.0.8"
     },
-    "license": "GPL-2.0"
+    "license": "GPL-2.0",
+    "keywords": ["elgg"],
+    "authors": [
+        {
+            "name": "Brett Profitt",
+            "email": "brett@elgg.org"
+        }
+    ]
 }
