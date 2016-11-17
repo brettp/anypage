@@ -1,3 +1,9 @@
+Version ???
+(From https://github.com/brettp/anypage)
+  * Updated for Elgg 2.2
+  * Added import and export
+  * No longer allowed to override /admin/* or /action/* paths
+
 Version 1.5.1
 (October 30, 2013 from https://github.com/brettp/anypage)
   * Fixed error redeclaring a function.

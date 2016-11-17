@@ -37,13 +37,13 @@ if (!$page_guid) {
 	}
 }
 
-elgg_register_menu_item('title', array(
-	'name' => 'anypage:new',
+echo elgg_view('output/url', [
 	'href' => "admin/appearance/anypage/new",
 	'text' => elgg_echo("anypage:new"),
-	'link_class' => 'elgg-button elgg-button-action',
-));
-$tabs = elgg_view('anypage/admin_tabs', array('current_page' => $page));
+	'class' => 'elgg-button elgg-button-action float-alt',
+]);
+
+$tabs = elgg_view('anypage/admin_tabs', ['current_page' => $page]);
 
 if (!$tabs) {
 	echo elgg_echo('anypage:no_pages');

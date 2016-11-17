@@ -3,12 +3,13 @@
  * Anypage language
  */
 
-return array(
+return [
 	'admin:appearance:anypage' => 'AnyPage Pages',
 	'admin:appearance:anypage:new' => 'New Page',
 	'item:object:anypage' => 'Anypages',
 
 	'anypage:warning' => 'Warning',
+	'anypage:error' => 'Error',
 	'anypage:unsupported_page_handler_character' => "This path uses a character that is unsupported "
 		. "in the default version of Elgg's .htaccess rewrite rules. You can only use letters, "
 		. "numbers, _, and - in paths before a /. Example: /test/page.html works but /page.html doesn't. <br /><br />"
@@ -19,6 +20,8 @@ return array(
 		. 'and could cause unexpected behavior. Only keep this path if you know what you are doing.',
 
 	'anypage:anypage_conflict' => 'This path conflicts with the AnyPage page "%s". Click its title to view, edit, or delete that page.',
+
+	'anypage:bad_idea' => 'This path conflicts with an important built-in page, so it will not be saved.',
 
 	'anypage:new' => 'New Page',
 	'anypage:no_pages' => 'You have not created any pages yet. Click the "New Page" link above to add a page.',
@@ -48,6 +51,7 @@ return array(
 	'anypage:save:success' => 'Saved page',
 	'anypage:delete:success' => 'Page deleted',
 	'anypage:no_path' => 'You must enter a path',
+	'anypage:admin_path' => 'Cannot override /admin.',
 	'anypage:no_view' => 'You must enter a view.',
 	'anypage:no_description' => 'You must enter a page body.',
 	'anypage:any_page_handler_conflict' => 'The path you entered is already registered to a page.',
@@ -61,4 +65,24 @@ return array(
 	'anypage:test_page_view' => 'This is an example of a page rendered by AnyPage using a view!',
 
 	'anypage:activate:admin_notice' => 'AnyPage has added example pages. Use the <a href="%s">admin interface</a> to add more pages.',
-);
+
+	'admin:appearance:anypage_import_export' => 'Import / Export AnyPage',
+
+	'anypage:export' => 'Export',
+	'anypage:export:instructions' => 'Check the pages you want to export.',
+	'anypage:export:invert_selection' => 'Invert selection',
+
+	'anypage:import' => 'Import',
+	'anypage:import:instructions' => 'Select AnyPage .sphp or .html files. If you use a HTML files, the name of '
+		. 'each file will be used as the title and URL of the imported AnyPage. HTML files will always create a new page. '
+		. 'Use shift or control to select multiple files.',
+
+	'anypage:import:file' => '.sphp or .html files',
+	'anypage:import:overwrite' => 'Overwrite existing pages with the same path, otherwise conflicting files are ignored',
+	'anypage:import:error_reading_file' => 'Error reading file: %s',
+	'anypage:import:error_processing_file' => 'Error processing file: %s',
+
+	'anypage:import:not_overwriting_path' => 'Not overwriting page "%s" (%s)',
+	'anypage:import:error_saving' => 'Could not save page',
+	'anypage:import:success' => 'Imported AnyPages: %s',
+];

@@ -12,6 +12,11 @@ class AnyPage extends ElggObject {
 		'view', 'html', 'composer'
 	);
 
+	private static $badIdeaPaths = [
+		'^/admin/',
+		'^/action/',
+	];
+
 	/**
 	 * Set subclass.
 	 * @return bool
@@ -190,7 +195,8 @@ class AnyPage extends ElggObject {
 	 * @return boolean
 	 */
 	static function hasPageHandlerConflict($path) {
-		$page_handlers = elgg_get_config('pagehandler');
+		$page_handlers = _elgg_services()->router->getPageHandlers();
+
 		// remove first slashes to get the real handler
 		$path = ltrim(AnyPage::normalizePath($path), '/');
 		$pages = explode('/', $path);
@@ -221,6 +227,16 @@ class AnyPage extends ElggObject {
 
 		$paths = AnyPage::getRegisteredPagePaths();
 		return in_array($path, $paths);
+	}
+
+	static function isPathBadIdea($path) {
+		$path = AnyPage::normalizePath($path);
+
+		foreach (self::$badIdeaPaths as $regexp) {
+			if (preg_match("|$regexp|i", $path)) {
+				return true;
+			}
+		}
 	}
 
 	/**
@@ -324,6 +340,15 @@ class AnyPage extends ElggObject {
 	 */
 	public static function viewPathConflicts($path, $page = null) {
 		$return = '';
+
+		// bad ideas don't even get processed, so stop there
+		if (self::isPathBadIdea($path)) {
+			$module_title = elgg_echo('anypage:error');
+			$msg = elgg_echo('anypage:bad_idea');
+
+			return elgg_view_module('info', $module_title, $msg,
+				['class' => 'anypage-message pvm elgg-message elgg-state-error']);
+		}
 
 		// unsupported characters
 		if (AnyPage::hasUnsupportedPageHandlerCharacter($path)) {
@@ -447,5 +472,43 @@ class AnyPage extends ElggObject {
 	 */
 	public function usesView() {
 		return $this->getRenderType() == 'view';
+	}
+
+	/**
+	 * Creates a new AnyPage object from a filename and HTML
+	 *
+	 * @param $filename
+	 * @param $html
+	 *
+	 * @return \AnyPage|bool
+	 */
+	public static function newFromHtml($filename, $html) {
+		$page = new self();
+
+		// remove file ext
+		if (strstr($filename, '.')) {
+			$filename = substr($filename, 0, strpos($filename, '.'));
+		}
+
+		$friendly_name = elgg_get_friendly_title($filename);
+
+		if (AnyPage::isPathBadIdea($friendly_name)) {
+			return false;
+		}
+
+		$page->setPagePath($friendly_name);
+		$page->title = self::getUnfriendlyTitle($friendly_name);
+		$page->description = $html;
+		$page->setRenderType('html');
+		$page->setRequiresLogin(false);
+		$page->setVisibleThroughWalledGarden(false);
+		$page->setShowInFooter(false);
+		$page->setLayout('default');
+
+		return $page;
+	}
+
+	public static function getUnfriendlyTitle($title) {
+		return ucwords(str_replace(['-', '_'], ' ', $title));
 	}
 }

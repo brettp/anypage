@@ -10,6 +10,7 @@ elgg_register_event_handler('init', 'system', 'anypage_init');
  */
 function anypage_init() {
 	elgg_register_admin_menu_item('configure', 'anypage', 'appearance');
+	elgg_register_admin_menu_item('configure', 'anypage_import_export', 'appearance');
 	// fix for selecting the right section in admin area
 	elgg_register_plugin_hook_handler('prepare', 'menu:page', 'anypage_init_fix_admin_menu');
 
@@ -18,6 +19,8 @@ function anypage_init() {
 	elgg_register_action('anypage/save', "$actions/save.php", 'admin');
 	elgg_register_action('anypage/delete', "$actions/delete.php", 'admin');
 	elgg_register_action('anypage/check_path', "$actions/check_path.php", 'admin');
+	elgg_register_action('anypage/import', "$actions/import.php", 'admin');
+	elgg_register_action('anypage/export', "$actions/export.php", 'admin');
 
 	elgg_extend_view('js/elgg', 'anypage/js');
 	elgg_extend_view('css/admin', 'anypage/admin_css');
@@ -90,17 +93,24 @@ function anypage_router($hook, $type, $value, $params) {
 
 	if ($page->getRenderType() === 'view') {
 		// route to view
-		echo elgg_view($page->getView());
-		exit;
+		$content = elgg_view($page->getView());
+		return false;
 	} else {
 		// display entity
 		$content = elgg_view_entity($page);
-		$body = elgg_view_layout($page->getLayout(), array(
+	}
+
+	$layout = $page->getLayout();
+	if ($layout) {
+		$body = elgg_view_layout($page->getLayout(), [
 			'content' => $content,
 			'title' => $page->title,
-		));
+		]);
 		echo elgg_view_page($page->title, $body);
-		exit;
+		return false;
+	} else {
+		echo $content;
+		return false;
 	}
 }
 

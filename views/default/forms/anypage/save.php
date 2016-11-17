@@ -155,14 +155,15 @@ $layout_options = AnyPage::getLayoutOptions();
 <div class="elgg-foot">
 <?php
 
-if ($guid) {
-	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
-	echo elgg_view('output/confirmlink', array(
-		'class' => 'float elgg-button elgg-button-action',
-		'text' => elgg_echo('delete'),
-		'href' => 'action/anypage/delete?guid=' . $guid
-	));
-}
+	if ($guid) {
+		echo elgg_view('input/hidden', ['name' => 'guid', 'value' => $guid]);
+		echo elgg_view('output/url', [
+			'class' => 'float elgg-button elgg-button-action',
+			'text' => elgg_echo('delete'),
+			'href' => 'action/anypage/delete?guid=' . $guid,
+			'confirm' => true
+		]);
+	}
 
 echo elgg_view('input/submit', array(
 	'value' => elgg_echo("save"),

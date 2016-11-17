@@ -21,6 +21,11 @@ if (!$page_path) {
 	forward(REFERER);
 }
 
+if (AnyPage::isPathBadIdea($page_path)) {
+	register_error(elgg_echo('anypage:bad_idea'));
+	forward(REFERER);
+}
+
 // check renderer
 switch ($render_type) {
 	case 'html':
