@@ -7,23 +7,23 @@
 
 $current_page = elgg_extract('current_page', $vars);
 
-$pages = elgg_get_entities(array(
+$pages = elgg_get_entities([
 	'type' => 'object',
 	'subtype' => 'anypage',
-	'limit' => 0
-));
+	'limit' => 0,
+]);
 
-$tabs = array();
+$tabs = [];
 foreach ($pages as $page) {
-	$tabs[] = array(
+	$tabs[] = [
 		'text' => $page->title,
 		'href' => '/admin/appearance/anypage?guid=' . $page->getGUID(),
-		'selected' => ($page == $current_page)
-	);
+		'selected' => ($page == $current_page),
+	];
 }
 
 if ($tabs) {
-	echo elgg_view('navigation/tabs', array(
-		'tabs' => $tabs
-	));
+	echo elgg_view('navigation/tabs', [
+		'tabs' => $tabs,
+	]);
 }

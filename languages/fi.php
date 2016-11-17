@@ -3,7 +3,7 @@
  * Anypage language
  */
 
-return array(
+return [
 	'admin:appearance:anypage' => 'Sivut',
 	'admin:appearance:anypage:new' => 'Uusi sivu',
 	'item:object:anypage' => 'Infosivut',
@@ -56,4 +56,4 @@ return array(
 	'anypage:test_page_view' => 'Tämä on esimerkisivu, joka käyttää järjestelmän sisäistä näkymää!',
 
 	'anypage:activate:admin_notice' => 'AnyPage-plugin on lisännyt esimerkkisivuja. Siirry osoitteeseen <a href="%s">admin interface</a> lisätäksesi uusia sivuja.',
-);
+];

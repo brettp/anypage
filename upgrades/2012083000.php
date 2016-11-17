@@ -3,11 +3,11 @@
  * Rewrite the use_view to the new render_type md.
  */
 
-$options = array(
+$options = [
 	'type' => 'object',
 	'subtype' => 'anypage',
-	'limit' => 0
-);
+	'limit' => 0,
+];
 
 $batch = new ElggBatch('elgg_get_entities', $options);
 

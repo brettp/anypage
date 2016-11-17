@@ -5,6 +5,6 @@
 
 $page = elgg_extract('entity', $vars);
 
-echo elgg_view('output/longtext', array(
-	'value' => $page->description
-));
+echo elgg_view('output/longtext', [
+	'value' => $page->description,
+]);

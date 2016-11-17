@@ -19,11 +19,11 @@ if (get_subtype_id('object', 'anypage')) {
 }
 
 // add example if no pages
-$count = elgg_get_entities(array(
+$count = elgg_get_entities([
 	'type' => 'object',
 	'subtype' => 'anypage',
-	'count' => true
-));
+	'count' => true,
+]);
 
 if (!$count) {
 	$page = new AnyPage();
@@ -41,5 +41,5 @@ if (!$count) {
 	$page->save();
 
 	elgg_add_admin_notice('anypage', elgg_echo('anypage:activate:admin_notice',
-			array(elgg_normalize_url('admin/appearance/anypage'))));
+		[elgg_normalize_url('admin/appearance/anypage')]));
 }
