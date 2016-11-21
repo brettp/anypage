@@ -20,6 +20,14 @@ echo elgg_view_input('dropdown', [
 ]);
 
 echo elgg_view_input('checkbox', [
+	'name' => 'html_fallback',
+	'value' => 1,
+	'label' => elgg_echo('anypage:import:html_fallback'),
+	'checked' => 'checked'
+]);
+
+
+echo elgg_view_input('checkbox', [
 	'name' => 'overwrite',
 	'value' => 1,
 	'label' => elgg_echo('anypage:import:overwrite'),

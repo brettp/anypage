@@ -9,6 +9,7 @@ $overwrite = get_input('overwrite', false);
 $files = _elgg_services()->request->files;
 $imports = $files->get('imports');
 $layout = get_input('layout', '');
+$html_fallback = get_input('html_fallback', true);
 
 /* @var UploadedFile $data */
 if (!$imports) {
@@ -20,29 +21,39 @@ $new_pages = [];
 
 /* @var UploadedFile $file */
 foreach ($imports as $file) {
-	if ($file->guessExtension() == 'html' || $file->guessClientExtension() == 'html') {
-		$page = AnyPage::newFromHtml($file->getClientOriginalName(), file_get_contents($file->getRealPath()));
-		$page->setLayout($layout);
-		if (!$page) {
-			register_error(elgg_echo('anypage:import:error_processing_file', [$file->getClientOriginalName()]));
-		} else {
-			$new_pages[] = $page;
-		}
-	} else {
-		$sdata = file_get_contents($file->getRealPath());
-		if (!$sdata) {
-			register_error(elgg_echo('anypage:import:error_reading_file', [$file->getClientOriginalName()]));
-		}
 
-		$data = unserialize($sdata);
-		if (!$data) {
-			register_error(elgg_echo('anypage:import:error_processing_file', [$file->getClientOriginalName()]));
-			forward(REFERRER);
-		}
+	$sdata = file_get_contents($file->getRealPath());
+	if ($sdata === false) {
+		register_error(elgg_echo('anypage:import:error_reading_file', [$file->getClientOriginalName()]));
+		continue;
+	}
 
+	$data = unserialize($sdata);
+	if ($data) {
+		// it's a serialized anypage array
 		foreach ($data as $page) {
 			// clone to remove any data from the export that doesn't make sense for the import
 			$new_pages[] = clone $page;
+		}
+	} else {
+		// it's not serialized, so check if we need to interpret as html
+		if ($html_fallback) {
+			$content = file_get_contents($file->getRealPath());
+
+			// convert to UTF8, trying to transliterate chars but ignoring any errors
+			// this is needed because of paste from Word >:O
+			$content = iconv(mb_detect_encoding($content, mb_detect_order(), true), "UTF-8//TRANSLIT//IGNORE", $content);
+
+			$page = AnyPage::newFromHtml($file->getClientOriginalName(), $content);
+
+			if (!$page) {
+				register_error(elgg_echo('anypage:import:error_processing_file', [$file->getClientOriginalName()]));
+			} else {
+				$page->setLayout($layout);
+				$new_pages[] = $page;
+			}
+		} else {
+			register_error(elgg_echo('anypage:import:error_processing_file', [$file->getClientOriginalName()]));
 		}
 	}
 }

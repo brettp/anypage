@@ -8,6 +8,8 @@
  *
  */
 class AnyPage extends ElggObject {
+	const ANYPAGE_EXPORT_VERSION = 1;
+
 	private $renderTypes = [
 		'view',
 		'html',

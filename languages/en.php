@@ -78,6 +78,7 @@ return [
 		. 'Use shift or control to select multiple files.',
 
 	'anypage:import:file' => '.sphp or .html files',
+	'anypage:import:html_fallback' => 'Allow importing plain HTML files. If off, all files must be AnyPage exports.',
 	'anypage:import:overwrite' => 'Overwrite existing pages with the same path, otherwise conflicting files are ignored',
 	'anypage:import:error_reading_file' => 'Error reading file: %s',
 	'anypage:import:error_processing_file' => 'Error processing file: %s',
