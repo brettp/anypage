@@ -85,5 +85,7 @@ return [
 
 	'anypage:import:not_overwriting_path' => 'Not overwriting page "%s" (%s)',
 	'anypage:import:error_saving' => 'Could not save page',
+	'anypage:import:data_missing' => 'Missing data file',
+	'anypage:import:unknown_error_processing_entry' => "Unknown error processing AnyPage export entry",
 	'anypage:import:success' => 'Imported AnyPages: %s',
 ];

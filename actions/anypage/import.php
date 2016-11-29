@@ -12,7 +12,7 @@ $layout = get_input('layout', '');
 $html_fallback = get_input('html_fallback', true);
 
 /* @var UploadedFile $data */
-if (!$imports) {
+if (!$imports || $imports[0] == null) {
 	register_error(elgg_echo('anypage:import:data_missing'));
 	forward(REFERRER);
 }
@@ -21,7 +21,6 @@ $new_pages = [];
 
 /* @var UploadedFile $file */
 foreach ($imports as $file) {
-
 	$sdata = file_get_contents($file->getRealPath());
 	if ($sdata === false) {
 		register_error(elgg_echo('anypage:import:error_reading_file', [$file->getClientOriginalName()]));
@@ -31,9 +30,12 @@ foreach ($imports as $file) {
 	$data = unserialize($sdata);
 	if ($data) {
 		// it's a serialized anypage array
-		foreach ($data as $page) {
-			// clone to remove any data from the export that doesn't make sense for the import
-			$new_pages[] = clone $page;
+		foreach ($data as $page_data) {
+			$page = AnyPage::newFromExported($page_data);
+			if (!$page) {
+				register_error(elgg_echo('anypage:import:unknown_error_processing_entry'));
+			}
+			$new_pages[] = $page;
 		}
 	} else {
 		// it's not serialized, so check if we need to interpret as html

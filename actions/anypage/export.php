@@ -16,11 +16,16 @@ $pages = elgg_get_entities([
 	'limit' => 0
 ]);
 
+$export = [];
+foreach ($pages as $page) {
+	$export[] = $page->export();
+}
+
 $domain = parse_url(elgg_get_site_url(), PHP_URL_HOST);
 $dt = date('Y-m-d');
 $filename = implode('-', array('static-content', $domain, $dt)) . '.sphp';
 
-$data = serialize($pages);
+$data = serialize($export);
 
 header('Content-Type: text/x-serialized-php');
 header('Content-Disposition: attachment; filename="' . $filename . '"');

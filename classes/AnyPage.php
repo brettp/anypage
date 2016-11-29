@@ -521,18 +521,33 @@ class AnyPage extends ElggObject {
 		return $page;
 	}
 
-	/**
-	 * Clone an AnyPage
-	 *
-	 * This is a helper for the import. The ElggEntity::clone() method
-	 * checks if the entity's guid exists first, and aborts if not
-	 */
-	public function __clone() {
-		// need to reinitialize attributes to fix subtype issues
-		$this->initializeAttributes();
-		$this->attributes['guid'] = null;
-		$this->attributes['container_guid'] = null;
-		$this->attributes['owner_guid'] = null;
+	public static function newFromExported(array $data) {
+		$page = new self();
+
+		foreach ($data as $name => $value) {
+			$page->$name = $value;
+		}
+
+		return $page;
+	}
+
+	public function export() {
+		$data = [
+			'title' => $this->title,
+			'description' => $this->description
+		];
+
+		$mds = elgg_get_metadata([
+			'guid' => $this->guid,
+			'limit' => 0
+		]);
+
+		// assuming no metadata arrays
+		foreach ($mds as $md) {
+			$data[$md->name] = $md->value;
+		}
+
+		return $data;
 	}
 
 	public static function getUnfriendlyTitle($title) {
