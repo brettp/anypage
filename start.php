@@ -20,7 +20,7 @@ function anypage_init() {
 	elgg_register_action('anypage/check_path', "$actions/check_path.php", 'admin');
 
 	elgg_extend_view('js/elgg', 'anypage/js');
-	elgg_extend_view('css/admin', 'anypage/admin_css');
+	elgg_extend_view('admin.css', 'anypage/admin.css');
 
 	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'anypage_walled_garden_public_pages');
