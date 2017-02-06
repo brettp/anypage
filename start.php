@@ -1,8 +1,8 @@
 <?php
+
 /**
  * Anypage
  */
-
 elgg_register_event_handler('init', 'system', 'anypage_init');
 
 /**
@@ -29,6 +29,9 @@ function anypage_init() {
 
 	// add marked pages to footer menu
 	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
+
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'anypage_entity_menu_setup');
+
 }
 
 /**
@@ -48,7 +51,7 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
 	if (isset($value['configure'])) {
 		foreach ($value['configure'] as $item) {
 			if ($item->getName() == 'appearance') {
-				foreach($item->getChildren() as $child) {
+				foreach ($item->getChildren() as $child) {
 					if ($child->getName() == 'appearance:anypage') {
 						$item->setSelected();
 						$child->setSelected();
@@ -189,6 +192,43 @@ function anypage_prepare_footer_menu($hook, $type, $value, $params) {
 	}
 
 	return $value;
+}
+
+/**
+ * Setup entity menu
+ *
+ * @param string         $hook   "register"
+ * @param string         $type   "menu:entity"
+ * @param ElggMenuItem[] $return Menu
+ * @param array          $params Hook params
+ * @return ElggMenuItem[]
+ */
+function anypage_entity_menu_setup($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params);
+	if (!$entity instanceof AnyPage) {
+		return;
+	}
+
+	if ($entity->canEdit()) {
+		$return[] = ElggMenuItem::factory([
+					'name' => 'edit',
+					'text' => elgg_echo('edit'),
+					'href' => "admin/appearance/anypage/edit?guid=$entity->guid",
+		]);
+	}
+
+	if ($entity->canDelete()) {
+		$return[] = ElggMenuItem::factory([
+			'name' => 'delete',
+			'text' => elgg_echo('delete'),
+			'confirm' => true,
+			'is_action' => true,
+			'href' => "action/entity/delete?guid=$entity->guid",
+		]);
+	}
+
+	return $return;
 }
 
 /**

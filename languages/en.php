@@ -6,6 +6,8 @@
 return array(
 	'admin:appearance:anypage' => 'AnyPage Pages',
 	'admin:appearance:anypage:new' => 'New Page',
+	'admin:appearance:anypage:edit' => 'Edit Page',
+	
 	'item:object:anypage' => 'Anypages',
 
 	'anypage:warning' => 'Warning',

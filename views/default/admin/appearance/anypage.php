@@ -1,15 +1,9 @@
 <?php
+
 /**
  * Settings for anypage
  */
 elgg_push_context('anypage');
-
-$page_guid = get_input('guid');
-$page = get_entity($page_guid);
-
-if ($page_guid && !elgg_instanceof($page, 'object', 'anypage')) {
-	forward(REFERER, 404);
-}
 
 if (anypage_needs_upgrade()) {
 	$title = elgg_echo('anypage:needs_upgrade');
@@ -22,19 +16,13 @@ if (anypage_needs_upgrade()) {
 	echo elgg_view_module('info', $title, $body, array('class' => 'anypage-message pvm elgg-message elgg-state-error'));
 
 	// don't show the pages because they will probably be wrong.
-	return true;
+	return;
 }
 
-if (!$page_guid) {
-	// default to first page if it exists
-	$pages = elgg_get_entities(array(
-		'type' => 'object',
-		'subtype' => 'anypage',
-		'limit' => 1,
-	));
-	if ($pages) {
-		$page = $pages[0];
-	}
+$page_guid = get_input('guid');
+if ($page_guid) {
+	// for BC, we support the guid query element
+	forward("admin/appearance/anypage/edit?guid=$page_guid");
 }
 
 elgg_register_menu_item('title', array(
@@ -43,13 +31,16 @@ elgg_register_menu_item('title', array(
 	'text' => elgg_echo("anypage:new"),
 	'link_class' => 'elgg-button elgg-button-action',
 ));
-$tabs = elgg_view('anypage/admin_tabs', array('current_page' => $page));
 
-if (!$tabs) {
-	echo elgg_echo('anypage:no_pages');
-} else {
-	echo $tabs;
-
-	$form_vars = anypage_prepare_form_vars($page);
-	echo elgg_view_form('anypage/save', array(), $form_vars);
-}
+$dbprefix = elgg_get_config('dbprefix');
+echo elgg_list_entities([
+	'types' => 'object',
+	'subtypes' => 'anypage',
+	'joins' => [
+		"JOIN {$dbprefix}objects_entity oe ON oe.guid = e.guid",
+	],
+	'order_by' => 'oe.title ASC',
+	'no_results' => elgg_echo('anypage:no_pages'),
+	'item_view' => 'object/anypage/summary',
+	'list_class' => 'anypage-list',
+]);
