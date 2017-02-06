@@ -3,6 +3,8 @@
  * Edit / add a page
  */
 
+elgg_require_js('forms/anypage/save');
+
 extract($vars);
 
 $is_walled_garden = elgg_get_config('walled_garden');

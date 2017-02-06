@@ -19,7 +19,6 @@ function anypage_init() {
 	elgg_register_action('anypage/delete', "$actions/delete.php", 'admin');
 	elgg_register_action('anypage/check_path', "$actions/check_path.php", 'admin');
 
-	elgg_extend_view('js/elgg', 'anypage/js');
 	elgg_extend_view('admin.css', 'anypage/admin.css');
 
 	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
