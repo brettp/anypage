@@ -1,23 +1,23 @@
 Anypage
 =======
+![Elgg 2.3](https://img.shields.io/badge/Elgg-2.3-orange.svg?style=flat-square)
 
-Intro
------
-Add any page to your site. Admin users can define a page address. Pages can be populated
-by an editor or by the view anypage/page/name. Pages are always relative to
-root.
+Static page management UI for Elgg
+
+Features
+--------
+
+* Create static pages with custom slugs (page addresses)
+* Pages can be populated by an editor or from a view
 
 Examples
 --------
-	Defined page: test_page
-	View: anypage/test_page
-	View file: views/default/anypage/test_page.php
 
-	Defined page: about/users
-	View: anypage/about/users
-	View file: views/default/anypage/about/users.php
+Defined slug: /privacy_policy
+View file: views/default/anypage/privacy_policy.php
 
-	Even works with file extensions!
-	Defined page: about/users/index.html
-	View: anypage/about/users/index.html.php
-	View file: views/default/anypage/about/users/index.html.php
+Defined slug: /about/users
+View file: views/default/anypage/about/users.php
+
+Defined page: about/users/index.html
+View file: views/default/anypage/about/users/index.html
