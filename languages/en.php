@@ -4,11 +4,11 @@
  */
 
 return array(
-	'admin:appearance:anypage' => 'AnyPage Pages',
+	'admin:appearance:anypage' => 'Static Pages',
 	'admin:appearance:anypage:new' => 'New Page',
 	'admin:appearance:anypage:edit' => 'Edit Page',
 	
-	'item:object:anypage' => 'Anypages',
+	'item:object:anypage' => 'Static pages',
 
 	'anypage:warning' => 'Warning',
 	'anypage:unsupported_page_handler_character' => "This path uses a character that is unsupported "
