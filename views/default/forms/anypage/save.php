@@ -2,174 +2,153 @@
 /**
  * Edit / add a page
  */
-
 elgg_require_js('forms/anypage/save');
 
-extract($vars);
+$entity = elgg_extract('entity', $vars);
 
-$is_walled_garden = elgg_get_config('walled_garden');
+$values = anypage_prepare_form_vars($entity, $vars);
 
-$desc_class = $render_type != 'html' ? 'class="hidden"' : '';
-$view_info_class = $render_type != 'view' ? 'class="hidden"' : '';
-$layout_class = $render_type == 'view' ? 'class="hidden"' : '';
+$desc_class = $values['render_type'] != 'html' ? 'class="hidden"' : '';
+$view_info_class = $values['render_type'] != 'view' ? 'class="hidden"' : '';
+$layout_class = $values['render_type'] == 'view' ? 'class="hidden"' : '';
 
-$visible_check = $visible_through_walled_garden ? 'checked="checked"' : '';
-if ($is_walled_garden) {
-	$requires_login_check = 'checked="checked"';
-} else {
-	$requires_login_check = $requires_login ? 'checked="checked"' : '';
+echo elgg_view_field([
+	'#type' => 'hidden',
+	'name' => 'guid',
+	'value' => $entity->guid,
+]);
+
+echo elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('title'),
+	'name' => 'title',
+	'value' => $values['title'],
+]);
+
+$conflicts = '';
+if ($entity) {
+	// display any path conflicts
+	$conflicts = AnyPage::viewPathConflicts($entity->getPagePath(), $entity);
 }
 
-$show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
+echo elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('anypage:path'),
+	'#help' => elgg_format_element('div', [
+		'id' => 'anypage-notice',
+			], $conflicts),
+	'name' => 'page_path',
+	'value' => $values['page_path'],
+	'id' => 'anypage-path',
+	'required' => true,
+]);
 
-$layout_options = AnyPage::getLayoutOptions();
-
-?>
-<div>
-	<label><?php echo elgg_echo('title'); ?></label><br />
-	<?php
-	echo elgg_view('input/text', array(
-		'name' => 'title',
-		'value' => $title
-	));
-	?>
-</div>
-
-<div>
-	<label><?php echo elgg_echo('anypage:path'); ?></label><br />
-	<?php
-	echo elgg_view('input/text', array(
-		'name' => 'page_path',
-		'value' => $page_path,
-		'id' => 'anypage-path'
-	));
-
-	// display any path conflicts
-	?><div id="anypage-notice"><?php
-	if ($entity) {
-		echo AnyPage::viewPathConflicts($entity->getPagePath(), $entity);
-	}
-	?></div><?php
-
-	echo elgg_echo('anypage:path_full_link') . ': ';
-	echo elgg_view('output/url', array(
-		'href' => $entity ? $entity->getPagePath() : '',
-		'text' => elgg_normalize_url($entity ? $entity->getPagePath() : ''),
-		'class' => 'anypage-updates-on-path-change'
-	));
-	?>
-</div>
-
-<div>
-<?php if ($is_walled_garden) { ?>
-	<label>
-		<input type="checkbox" name="visible_through_walled_garden"
-			   value="1" <?php echo $visible_check; ?> />
-		<?php echo elgg_echo('anypage:visible_through_walled_garden'); ?>
-	</label>
-	<br />
-
-	<label class="elgg-quiet">
-		<input type="checkbox" name="requires_login" value="1"
-			<?php echo $requires_login_check; ?> disabled="disabled"/>
-		<?php echo elgg_echo('anypage:requires_login'); ?>
-	</label>
-<?php } else { ?>
-	<label class="elgg-quiet">
-		<input type="checkbox" name="visible_through_walled_garden"
-			   value="1" <?php echo $visible_check; ?> disabled="disabled"/>
-		<?php echo elgg_echo('anypage:visible_through_walled_garden:disabled'); ?>
-	</label>
-	<br />
-
-	<label>
-		<input type="checkbox" name="requires_login" value="1"
-			<?php echo $requires_login_check; ?> />
-		<?php echo elgg_echo('anypage:requires_login'); ?>
-	</label>
-<?php } ?>
-</div>
-
-<div>
-	<label>
-	<input type="checkbox" name="show_in_footer" value="1" <?php echo $show_in_footer_check; ?> />
-	<?php
-		echo elgg_echo('anypage:show_in_footer');
-	?>
-	</label>
-</div>
-
-<div>
-	<label>
-	<?php
-		echo elgg_view('input/dropdown', array(
-			'name' => 'render_type',
-			'id' => 'anypage-render-type',
-			'options_values' => array(
-				'html' => elgg_echo('anypage:use_editor'),
-				'view' => elgg_echo('anypage:use_view'),
-			),
-			'value' => $render_type
+$entity_path = $entity ? $entity->getPagePath() : '';
+$link = elgg_echo('anypage:path_full_link') . ': ';
+$link .= elgg_view('output/url', array(
+	'href' => $entity_path,
+	'text' => elgg_normalize_url($entity_path),
+	'class' => 'anypage-updates-on-path-change'
 		));
-	?>
-	</label>
-</div>
 
-<div id="anypage-layout" class="<?php echo $layout_class;?>">
-	<label>
-		<?php echo elgg_echo('anypage:layout'); ?>:
+echo elgg_format_element('div', ['class' => 'elgg-field'], $link);
 
-		<?php
-			echo elgg_view('input/dropdown', array(
-				'options_values' => $layout_options,
-				'name' => 'layout',
-				'class' => 'anypage-layout',
-				'value' => $layout
-			));
-		?>
+if (elgg_get_config('walled_garden')) {
+	echo elgg_view_field([
+		'#type' => 'checkbox',
+		'label' => elgg_echo('anypage:visible_through_walled_garden'),
+		'name' => 'visible_through_walled_garden',
+		'checked' => $values['visible_through_walled_garden'],
+		'value' => 1,
+	]);
 
-		<span class="elgg-text-help elgg-quiet">
-			<?php echo elgg_echo('anypage:layout:help'); ?>
-		</span>
-	</label>
-</div>
+	echo elgg_view_field([
+		'#type' => 'checkbox',
+		'label' => elgg_echo('anypage:requires_login'),
+		'name' => 'requires_login',
+		'value' => 1,
+		'disabled' => true,
+		'checked' => true,
+		'field_class' => 'elgg-quiet',
+	]);
+} else {
+echo elgg_view_field([
+		'#type' => 'checkbox',
+		'label' => elgg_echo('anypage:visible_through_walled_garden:disabled'),
+		'name' => 'visible_through_walled_garden',
+		'checked' => $values['visible_through_walled_garden'],
+		'value' => 1,
+	'disabled' => true,
+	'field_class' => 'elgg-quiet',
+	]);
 
-<div id="anypage-view-info" <?php echo $view_info_class;?>>
-	<p>
+	echo elgg_view_field([
+		'#type' => 'checkbox',
+		'label' => elgg_echo('anypage:requires_login'),
+		'name' => 'requires_login',
+		'value' => 1,
+		'checked' => $values['requires_login'],
+	]);
+}
+
+echo elgg_view_field([
+	'#type' => 'checkbox',
+	'label' => elgg_echo('anypage:show_in_footer'),
+	'name' => 'show_in_footer',
+	'value' => 1,
+	'checked' => $values['show_in_footer'],
+]);
+
+echo elgg_view_field([
+	'#type' => 'select',
+	'name' => 'render_type',
+	'id' => 'anypage-render-type',
+	'options_values' => array(
+		'html' => elgg_echo('anypage:use_editor'),
+		'view' => elgg_echo('anypage:use_view'),
+	),
+	'value' => $values['render_type'],
+]);
+?>
+
+<div id="anypage-layout" class = "<?php echo $layout_class; ?>">
 	<?php
-	echo '<p>' . elgg_echo('anypage:view_info');
-	echo " anypage<span class=\"anypage-updates-on-path-change\">$page_path</span>";
-	echo '</p>';
+	echo elgg_view_field([
+		'#type' => 'select',
+		'#label' => elgg_echo('anypage:layout'),
+		'#help' => elgg_echo('anypage:layout:help'),
+		'options_values' => AnyPage::getLayoutOptions(),
+		'name' => 'layout',
+		'class' => 'anypage-layout',
+		'value' => $layout,
+	]);
 	?>
+</div>
+
+<div id="anypage-view-info" <?php echo $view_info_class; ?>>
+	<p>
+		<?php
+		echo elgg_echo('anypage:view_info');
+		echo " anypage<span class=\"anypage-updates-on-path-change\">$entity_path</span>";
+		?>
 	</p>
 </div>
 
-<div id="anypage-description" <?php echo $desc_class;?>>
-	<label><?php echo elgg_echo('anypage:body'); ?></label><br />
+<div id="anypage-description" <?php echo $desc_class; ?>>
 	<?php
-	echo elgg_view('input/longtext', array(
+	echo elgg_view_field([
+		'#type' => 'longtext',
+		'#label' => elgg_echo('anypage:body'),
 		'name' => 'description',
-		'value' => $description
-	));
+		'value' => $description,
+	]);
 	?>
 </div>
 
-<div class="elgg-foot">
 <?php
+$footer = elgg_view_field([
+	'#type' => 'submit',
+	'value' => elgg_echo('save'),
+		]);
 
-if ($guid) {
-	echo elgg_view('input/hidden', array('name' => 'guid', 'value' => $guid));
-	echo elgg_view('output/confirmlink', array(
-		'class' => 'float elgg-button elgg-button-action',
-		'text' => elgg_echo('delete'),
-		'href' => 'action/anypage/delete?guid=' . $guid
-	));
-}
-
-echo elgg_view('input/submit', array(
-	'value' => elgg_echo("save"),
-	'class' => 'float-alt elgg-button elgg-button-action'
-	));
-
-?>
-</div>
+elgg_set_form_footer($footer);

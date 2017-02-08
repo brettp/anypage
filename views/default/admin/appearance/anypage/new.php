@@ -5,6 +5,4 @@
 
 elgg_push_context('anypage');
 
-//echo elgg_view('anypage/admin_tabs', array('current_page' => $page));
-
-echo elgg_view_form('anypage/save', array(), anypage_prepare_form_vars());
+echo elgg_view_form('anypage/save');

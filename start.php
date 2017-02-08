@@ -109,10 +109,11 @@ function anypage_router($hook, $type, $value, $params) {
 /**
  * Prepare form variables for page edit form.
  *
- * @param mixed $page
+ * @param AnyPage $page Page instance
+ * @param array   $vars View vars
  * @return array
  */
-function anypage_prepare_form_vars($page = null) {
+function anypage_prepare_form_vars($page = null, array $vars = []) {
 	$values = array(
 		'title' => '',
 		'page_path' => '',
@@ -126,7 +127,9 @@ function anypage_prepare_form_vars($page = null) {
 		'entity' => $page,
 	);
 
-	if ($page) {
+	$values = array_merge($values, $vars);
+	
+	if ($page instanceof AnyPage) {
 		foreach (array_keys($values) as $field) {
 			if (isset($page->$field)) {
 				$values[$field] = $page->$field;
