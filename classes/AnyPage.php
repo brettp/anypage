@@ -190,11 +190,14 @@ class AnyPage extends ElggObject {
 	 * @return boolean
 	 */
 	static function hasPageHandlerConflict($path) {
-		$page_handlers = elgg_get_config('pagehandler');
+		$page_handlers = _elgg_services()->router->getPageHandlers();
+
 		// remove first slashes to get the real handler
 		$path = ltrim(AnyPage::normalizePath($path), '/');
+
 		$pages = explode('/', $path);
 		$handler = array_shift($pages);
+		
 		if (isset($page_handlers[$handler])) {
 			return true;
 		}
