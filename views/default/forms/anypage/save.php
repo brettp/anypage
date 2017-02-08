@@ -108,10 +108,6 @@ echo elgg_view_field([
 	),
 	'value' => $values['render_type'],
 ]);
-
-$desc_class = $values['render_type'] != 'html' ? 'class="hidden"' : '';
-$view_info_class = $values['render_type'] != 'view' ? 'class="hidden"' : '';
-$layout_class = $values['render_type'] == 'view' ? 'class="hidden"' : '';
 ?>
 
 <div id="anypage-render-options" data-render-type="<?= $values['render_type'] ?>">
@@ -131,6 +127,15 @@ $layout_class = $values['render_type'] == 'view' ? 'class="hidden"' : '';
 			'name' => 'description',
 			'value' => $values['description'],
 			'id' => 'anypage-description',
+		]);
+		echo elgg_view_field([
+			'#type' => 'checkbox',
+			'label' => elgg_echo('anypage:unsafe_html'),
+			'#help' => elgg_echo('anypage:unsafe_html:help'),
+			'name' => 'unsafe_html',
+			'default' => false,
+			'value' => 1,
+			'checked' => (bool) $values['unsafe_html'],
 		]);
 		?>
 	</div>

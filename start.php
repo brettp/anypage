@@ -124,6 +124,7 @@ function anypage_prepare_form_vars($page = null, array $vars = []) {
 		'layout' => 'one_column',
 		'guid' => null,
 		'entity' => $page,
+		'unsafe_html' => false,
 	);
 
 	$values = array_merge($values, $vars);

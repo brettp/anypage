@@ -40,6 +40,8 @@ return array(
 	'anypage:requires_login' => 'Requires login',
 	'anypage:show_in_footer' => 'Add a link in the site footer',
 	'anypage:layout' => 'Layout',
+	'anypage:unsafe_html' => 'Disable HTML filtering and validation',
+	'anypage:unsafe_html:help' => 'Do not use this option if you are copying HTML content from an untrusted source! HTML filtering keeps your site secure by preventing cross-site scripting injections and ensures HTML validity. You may sometime need to resort to this option, if you are embedding, for example, a Google Calendar or a YouTube video.',
 
 	'anypage:use_view' => 'Display a custom view',
 	'anypage:use_editor' => 'Use an editor to write this page',
