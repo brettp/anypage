@@ -31,17 +31,9 @@ if ($entity) {
 	$conflicts = AnyPage::viewPathConflicts($entity->getPagePath(), $entity);
 }
 
-echo elgg_view_field([
-	'#type' => 'text',
-	'#label' => elgg_echo('anypage:path'),
-	'#help' => elgg_format_element('div', [
-		'id' => 'anypage-notice',
-			], $conflicts),
-	'name' => 'page_path',
-	'value' => $values['page_path'],
-	'id' => 'anypage-path',
-	'required' => true,
-]);
+$notice = elgg_format_element('div', [
+	'id' => 'anypage-notice',
+		], $conflicts);
 
 $entity_path = $entity ? $entity->getPagePath() : '';
 $link = elgg_echo('anypage:path_full_link') . ': ';
@@ -51,7 +43,17 @@ $link .= elgg_view('output/url', array(
 	'class' => 'anypage-updates-on-path-change'
 		));
 
-echo elgg_format_element('div', ['class' => 'elgg-field'], $link);
+$link = elgg_format_element('div', [], $link);
+
+echo elgg_view_field([
+	'#type' => 'text',
+	'#label' => elgg_echo('anypage:path'),
+	'#help' => $link . $notice,
+	'name' => 'page_path',
+	'value' => $values['page_path'],
+	'id' => 'anypage-path',
+	'required' => true,
+]);
 
 if (elgg_get_config('walled_garden')) {
 	echo elgg_view_field([
@@ -72,14 +74,15 @@ if (elgg_get_config('walled_garden')) {
 		'field_class' => 'elgg-quiet',
 	]);
 } else {
-echo elgg_view_field([
+	echo elgg_view_field([
 		'#type' => 'checkbox',
-		'label' => elgg_echo('anypage:visible_through_walled_garden:disabled'),
+		'label' => elgg_echo('anypage:visible_through_walled_garden'),
+		'#help' => elgg_echo('anypage:walled_garden_disabled'),
 		'name' => 'visible_through_walled_garden',
 		'checked' => $values['visible_through_walled_garden'],
 		'value' => 1,
-	'disabled' => true,
-	'field_class' => 'elgg-quiet',
+		'disabled' => true,
+		'field_class' => 'elgg-quiet',
 	]);
 
 	echo elgg_view_field([
@@ -128,7 +131,7 @@ echo elgg_view_field([
 	<p>
 		<?php
 		echo elgg_echo('anypage:view_info');
-		echo " anypage<span class=\"anypage-updates-on-path-change\">$entity_path</span>";
+		echo " <strong>anypage<span class=\"anypage-updates-on-path-change\">$entity_path</span></strong>";
 		?>
 	</p>
 </div>

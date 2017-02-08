@@ -29,7 +29,7 @@ return array(
 	'anypage:view_info' => 'Sivun näyttämiseen käytetään järjestelmän sisäistä näkymää:',
 	'anypage:body' => 'Sivun sisältö',
 	'anypage:visible_through_walled_garden' => 'Nähtävissä, kun Walled Garden -ominaisuus on päällä',
-	'anypage:visible_through_walled_garden:disabled' => 'Näytetään kirjautumattomille käyttäjille (Walled Garden ei ole käytössä)',
+	'anypage:walled_garden_disabled' => 'Walled Garden ei ole käytössä',
 	'anypage:requires_login' => 'Näytä vain kirjautuneille',
 	'anypage:show_in_footer' => 'Lisää linkki sivuston footeriin',
 	'anypage:layout' => 'Layout',
