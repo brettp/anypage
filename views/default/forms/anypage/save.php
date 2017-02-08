@@ -8,10 +8,6 @@ $entity = elgg_extract('entity', $vars);
 
 $values = anypage_prepare_form_vars($entity, $vars);
 
-$desc_class = $values['render_type'] != 'html' ? 'class="hidden"' : '';
-$view_info_class = $values['render_type'] != 'view' ? 'class="hidden"' : '';
-$layout_class = $values['render_type'] == 'view' ? 'class="hidden"' : '';
-
 echo elgg_view_field([
 	'#type' => 'hidden',
 	'name' => 'guid',
@@ -112,39 +108,40 @@ echo elgg_view_field([
 	),
 	'value' => $values['render_type'],
 ]);
+
+$desc_class = $values['render_type'] != 'html' ? 'class="hidden"' : '';
+$view_info_class = $values['render_type'] != 'view' ? 'class="hidden"' : '';
+$layout_class = $values['render_type'] == 'view' ? 'class="hidden"' : '';
 ?>
 
-<div id="anypage-layout" class = "<?php echo $layout_class; ?>">
-	<?php
-	echo elgg_view_field([
-		'#type' => 'select',
-		'#label' => elgg_echo('anypage:layout'),
-		'options_values' => AnyPage::getLayoutOptions(),
-		'name' => 'layout',
-		'class' => 'anypage-layout',
-		'value' => $layout,
-	]);
-	?>
-</div>
-
-<div id="anypage-view-info" <?php echo $view_info_class; ?>>
-	<p>
+<div id="anypage-render-options" data-render-type="<?= $values['render_type'] ?>">
+	<div id="anypage-layout" data-render-type="html">
 		<?php
-		echo elgg_echo('anypage:view_info');
-		echo " <strong>anypage<span class=\"anypage-updates-on-path-change\">$entity_path</span></strong>";
+		echo elgg_view_field([
+			'#type' => 'select',
+			'#label' => elgg_echo('anypage:layout'),
+			'options_values' => AnyPage::getLayoutOptions(),
+			'name' => 'layout',
+			'class' => 'anypage-layout',
+			'value' => $values['layout'],
+		]);
+		echo elgg_view_field([
+			'#type' => 'longtext',
+			'#label' => elgg_echo('anypage:body'),
+			'name' => 'description',
+			'value' => $values['description'],
+			'id' => 'anypage-description',
+		]);
 		?>
-	</p>
-</div>
-
-<div id="anypage-description" <?php echo $desc_class; ?>>
-	<?php
-	echo elgg_view_field([
-		'#type' => 'longtext',
-		'#label' => elgg_echo('anypage:body'),
-		'name' => 'description',
-		'value' => $description,
-	]);
-	?>
+	</div>
+	<div id="anypage-view-info" data-render-type="view">
+		<p>
+			<?php
+			echo elgg_echo('anypage:view_info');
+			echo " <strong>anypage<span class=\"anypage-updates-on-path-change\">$entity_path</span></strong>";
+			?>
+		</p>
+	</div>
 </div>
 
 <?php

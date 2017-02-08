@@ -47,20 +47,7 @@ define(function (require) {
 
 	$(document).on('change', '#anypage-render-type', function () {
 		var $this = $(this);
-
-		switch ($this.val()) {
-			case 'view':
-				$('#anypage-view-info').show();
-				$('#anypage-description').hide();
-				$('#anypage-layout').hide();
-				break;
-
-			case 'html':
-				$('#anypage-view-info').hide();
-				$('#anypage-description').show();
-				$('#anypage-layout').show();
-				break;
-		}
+		$('#anypage-render-options').attr('data-render-type', $this.val());
 	});
 
 	$(document).on('change', '#anypage-path', anypage.updatePath);

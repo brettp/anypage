@@ -14,3 +14,15 @@
 .anypage-list > li .elgg-listing-summary-content p {
     margin: 5px 0;
 }
+
+#anypage-render-options [data-render-type] {
+	display: none;
+}
+
+#anypage-render-options[data-render-type="html"] [data-render-type="html"] {
+	display: block;
+}
+
+#anypage-render-options[data-render-type="view"] [data-render-type="view"] {
+	display: block;
+}
