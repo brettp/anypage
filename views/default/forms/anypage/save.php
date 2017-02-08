@@ -116,7 +116,6 @@ echo elgg_view_field([
 	echo elgg_view_field([
 		'#type' => 'select',
 		'#label' => elgg_echo('anypage:layout'),
-		'#help' => elgg_echo('anypage:layout:help'),
 		'options_values' => AnyPage::getLayoutOptions(),
 		'name' => 'layout',
 		'class' => 'anypage-layout',

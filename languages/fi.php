@@ -33,7 +33,6 @@ return array(
 	'anypage:requires_login' => 'Näytä vain kirjautuneille',
 	'anypage:show_in_footer' => 'Lisää linkki sivuston footeriin',
 	'anypage:layout' => 'Layout',
-	'anypage:layout:help' => '(Lisätietoja readme-tiedostossa)',
 
 	'anypage:use_view' => 'Käytä järjestelmän sisäistä näkymää',
 	'anypage:use_editor' => 'Kirjoita sivu itse',

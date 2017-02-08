@@ -21,3 +21,8 @@ View file: views/default/anypage/about/users.php
 
 Defined page: about/users/index.html
 View file: views/default/anypage/about/users/index.html
+
+Dev Notes
+---------
+
+To add a custom layout, use `'layouts','anypage'` plugin hook.

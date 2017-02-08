@@ -407,43 +407,19 @@ class AnyPage extends ElggObject {
 	}
 
 	/**
-	 * Return all valid layouts WITHOUT the page/layouts/ prefix.
-	 *
-	 * @global type $CONFIG
+	 * Return a list of usable layouts
+	 * 
 	 * @return array
 	 */
 	public static function getLayouts() {
-		global $CONFIG;
-		
-		// some helper functions borrowed from the dev's mod
-		$view_list = array();
 
-		$dir = $CONFIG->viewpath . "default/page/layouts/";
+		$view_list = [
+			'one_column',
+			'one_sidebar',
+			'two_sidebar',
+		];
 
-		$handle = opendir($dir);
-		while ($file = readdir($handle)) {
-			if ($file[0] != '.') {
-				$extension = strrchr(trim($file, "/"), '.');
-				
-				if ($extension === ".php") {
-					$view_list[] = $dir . $file;
-				}
-			}
-		}
-		closedir($handle);
-
-		// remove base path and php extension
-		array_walk($view_list, create_function('&$v,$k', 'global $CONFIG; $v = substr($v, strlen($CONFIG->viewpath . "default/"), -4);'));
-
-		$views = elgg_get_config('views');
-
-		$plugin_layouts = array_filter(array_keys($views->locations['default']), create_function('$view', 'return (0 === strpos($view, "page/layouts"));'));
-
-		$view_list = array_merge($plugin_layouts, $view_list);
-		array_walk($view_list, create_function('&$v,$k', '$v = str_replace("page/layouts/", "", $v);'));
-		sort($view_list);
-	
-		return $view_list;
+		return elgg_trigger_plugin_hook('layouts', 'anypage', null, $view_list);
 	}
 
 	/**
