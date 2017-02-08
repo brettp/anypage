@@ -16,7 +16,6 @@ function anypage_init() {
 	$actions = dirname(__FILE__) . '/actions/anypage';
 
 	elgg_register_action('anypage/save', "$actions/save.php", 'admin');
-	elgg_register_action('anypage/delete', "$actions/delete.php", 'admin');
 	elgg_register_action('anypage/check_path', "$actions/check_path.php", 'admin');
 
 	elgg_extend_view('admin.css', 'anypage/admin.css');

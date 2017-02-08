@@ -12,8 +12,10 @@ $path = get_input('path');
 $page = get_entity(get_input('guid'));
 $warning = AnyPage::viewPathConflicts($path, $page);
 
-echo json_encode(array(
+$data = [
 	'normalized_path' => AnyPage::normalizePath($path),
 	'valid' => !(bool) $warning,
 	'html' => $warning
-));
+];
+
+return elgg_ok_response($data);

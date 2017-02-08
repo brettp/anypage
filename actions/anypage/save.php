@@ -17,33 +17,22 @@ elgg_make_sticky_form('anypage');
 
 // check path
 if (!$page_path) {
-	register_error(elgg_echo('anypage:no_path'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('anypage:no_path'));
 }
 
 // check renderer
 switch ($render_type) {
 	case 'html':
 		if (!$description) {
-			register_error(elgg_echo('anypage:no_description'));
-			forward(REFERER);
+			return elgg_error_response(elgg_echo('anypage:no_description'));
 		}
 		break;
 	
 	case 'view':
-//		register_error(elgg_echo('anypage:no_view'));
-//		forward(REFERER);
 		break;
-//	
-//	case 'composer':
-//		register_error('todo');
-//		forward(REFERER);
-//		break;
 
 	default:
-		register_error(elgg_echo('anypage:invalid_render_type'));
-		forward(REFERER);
-		break;
+		return elgg_error_response(elgg_echo('anypage:invalid_render_type'));
 }
 
 if ($guid == 0) {
@@ -51,13 +40,11 @@ if ($guid == 0) {
 } else {
 	$page = get_entity($guid);
 	if (!elgg_instanceof($page, 'object', 'anypage')) {
-		system_message(elgg_echo('anypage:save:failed'));
-		forward(REFERRER);
+		return elgg_error_response(elgg_echo('anypage:save:failed'));
 	}
 
 	if (AnyPage::hasAnyPageConflict($page_path, $page)) {
-		register_error(elgg_echo('anypage:any_page_handler_conflict'));
-		forward(REFERER);
+		return elgg_error_response(elgg_echo('anypage:any_page_handler_conflict'));
 	}
 }
 
@@ -72,14 +59,14 @@ $page->setLayout($layout);
 
 if ($page->save()) {
 	elgg_clear_sticky_form('anypage');
-	system_message(elgg_echo('anypage:save:success'));
 
 	if ($guid) {
-		forward(REFERER);
+		$forward_url = REFERER;
 	} else {
-		forward('admin/appearance/anypage/');
+		$forward_url = 'admin/appearance/anypage/';
 	}
+
+	return elgg_ok_response('', elgg_echo('anypage:save:success'), $forward_url);
 } else {
-	register_error(elgg_echo('anypage:save:failed'));
-	forward(REFERER);
+	return elgg_error_response(elgg_echo('anypage:save:failed'));
 }
