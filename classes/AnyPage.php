@@ -8,9 +8,21 @@
  *
  */
 class AnyPage extends ElggObject {
-	private $renderTypes = array(
-		'view', 'html', 'composer'
-	);
+
+	/**
+	 * @var array
+	 */
+	static $page_paths;
+
+	/**
+	 * @var array
+	 */
+	static $walled_garden_paths;
+
+	/**
+	 * @var array
+	 */
+	private $renderTypes = ['view', 'html'];
 
 	/**
 	 * Set subclass.
@@ -32,8 +44,8 @@ class AnyPage extends ElggObject {
 		$site = elgg_get_site_entity();
 
 		$this->access_id = ACCESS_PUBLIC;
-		$this->container_guid = $site->getGUID();
-		$this->owner_guid = $site->getGUID();
+		$this->container_guid = $site->guid;
+		$this->owner_guid = $site->guid;
 
 		return parent::save();
 	}
@@ -80,7 +92,7 @@ class AnyPage extends ElggObject {
 		if (!in_array($type, $this->renderTypes)) {
 			return false;
 		}
-		
+
 		return $this->render_type = $type;
 	}
 
@@ -197,7 +209,7 @@ class AnyPage extends ElggObject {
 
 		$pages = explode('/', $path);
 		$handler = array_shift($pages);
-		
+
 		if (isset($page_handlers[$handler])) {
 			return true;
 		}
@@ -242,25 +254,30 @@ class AnyPage extends ElggObject {
 	 * @return array guid => path_name
 	 */
 	static function getRegisteredPagePaths() {
+		if (isset(self::$page_paths)) {
+			return self::$page_paths;
+		}
+
 		$entities = elgg_get_entities_from_metadata(array(
 			'type' => 'object',
 			'subtype' => 'anypage',
-			'limit' => 0
-				));
+			'limit' => 0,
+			'batch' => true,
+		));
 
-		$paths = array();
+		self::$page_paths = [];
 		foreach ($entities as $entity) {
-			$paths[$entity->getGUID()] = $entity->getPagePath();
+			self::$page_paths[$entity->guid] = $entity->getPagePath();
 		}
 
-		return $paths;
+		return self::$page_paths;
 	}
 
 	/**
 	 * Returns an AnyPage entity from its path
 	 *
 	 * @param string $path
-	 * @return mixed AnyPage entity or false
+	 * @return AnyPage|false
 	 */
 	public static function getAnyPageEntityFromPath($path) {
 		$path = AnyPage::normalizePath($path);
@@ -270,7 +287,7 @@ class AnyPage extends ElggObject {
 			'metadata_name' => 'page_path',
 			'metadata_value' => $path,
 			'limit' => 1
-				));
+		));
 
 		if (!$entities) {
 			return false;
@@ -283,22 +300,29 @@ class AnyPage extends ElggObject {
 	 * Returns paths for pages marked as public through walled garden
 	 *
 	 * @param string $path
-	 * @return mixed AnyPage entity or false
+	 * @return array
 	 */
 	public static function getPathsVisibleThroughWalledGarden() {
+
+		if (isset(self::$walled_garden_paths)) {
+			return self::$walled_garden_paths;
+		}
+
 		$entities = elgg_get_entities_from_metadata(array(
 			'type' => 'object',
 			'subtype' => 'anypage',
 			'metadata_name' => 'visible_through_walled_garden',
-			'metadata_value' => '1'
-				));
+			'metadata_value' => '1',
+			'limit' => 0,
+			'batch' => true,
+		));
 
-		$paths = array();
+		self::$walled_garden_paths = [];
 		foreach ($entities as $page) {
-			$paths[] = $page->getPagePath();
+			self::$walled_garden_paths[] = $page->getPagePath();
 		}
 
-		return $paths;
+		return self::$walled_garden_paths;
 	}
 
 	/**
@@ -422,7 +446,6 @@ class AnyPage extends ElggObject {
 		return $view_list;
 	}
 
-
 	/**
 	 * Deprecated methods 1.3
 	 */
@@ -451,4 +474,5 @@ class AnyPage extends ElggObject {
 	public function usesView() {
 		return $this->getRenderType() == 'view';
 	}
+
 }
