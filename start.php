@@ -1,9 +1,10 @@
 <?php
+
 /**
  * Anypage
  */
-
 elgg_register_event_handler('init', 'system', 'anypage_init');
+elgg_register_plugin_hook_handler('route:rewrite', 'all', 'anypage_router');
 
 /**
  * Anypage init
@@ -16,19 +17,21 @@ function anypage_init() {
 	$actions = dirname(__FILE__) . '/actions/anypage';
 
 	elgg_register_action('anypage/save', "$actions/save.php", 'admin');
-	elgg_register_action('anypage/delete', "$actions/delete.php", 'admin');
 	elgg_register_action('anypage/check_path', "$actions/check_path.php", 'admin');
 
-	elgg_extend_view('js/elgg', 'anypage/js');
-	elgg_extend_view('css/admin', 'anypage/admin_css');
+	elgg_extend_view('admin.css', 'anypage/admin.css');
 
-	elgg_register_plugin_hook_handler('route', 'all', 'anypage_router');
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'anypage_walled_garden_public_pages');
 
 	elgg_register_event_handler('upgrade', 'system', 'anypage_upgrader');
 
 	// add marked pages to footer menu
 	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
+
+	elgg_register_plugin_hook_handler('register', 'menu:entity', 'anypage_entity_menu_setup');
+
+	elgg_register_page_handler('anypage', 'anypage_page_handler');
+
 }
 
 /**
@@ -48,7 +51,7 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
 	if (isset($value['configure'])) {
 		foreach ($value['configure'] as $item) {
 			if ($item->getName() == 'appearance') {
-				foreach($item->getChildren() as $child) {
+				foreach ($item->getChildren() as $child) {
 					if ($child->getName() == 'appearance:anypage') {
 						$item->setSelected();
 						$child->setSelected();
@@ -62,55 +65,61 @@ function anypage_init_fix_admin_menu($hook, $type, $value, $params) {
 }
 
 /**
- * Route to the correct page if defined. Allows a fallthrough to the 404 error page otherwise.
+ * Rewrite route if it is a configured anypage route
  *
- * @param $hook
- * @param $type
- * @param $value
- * @param $params
+ * @param string $hook   "route:rewrite"
+ * @param string $type   "all"
+ * @param array  $route  Route
+ * @param array  $params Hook params
+ * @return array
  */
-function anypage_router($hook, $type, $value, $params) {
-	if (!$value) {
+function anypage_router($hook, $type, $route, $params) {
+	if (!$route) {
 		return;
 	}
 
-	$handler = elgg_extract('handler', $value);
-	$pages = elgg_extract('segments', $value, array());
-	array_unshift($pages, $handler);
-	$path = AnyPage::normalizePath(implode('/', $pages));
+	$handler = elgg_extract('identifier', $route);
+	$segments = elgg_extract('segments', $route, []);
+	array_unshift($segments, $handler);
+	
+	$path = AnyPage::normalizePath(implode('/', $segments));
 
 	$page = AnyPage::getAnyPageEntityFromPath($path);
 	if (!$page) {
 		return;
 	}
 
-	if ($page->requiresLogin()) {
-		gatekeeper();
-	}
+	return [
+		'identifier' => 'anypage',
+		'segments' => $segments,
+	];
+}
 
-	if ($page->getRenderType() === 'view') {
-		// route to view
-		echo elgg_view($page->getView());
-		exit;
-	} else {
-		// display entity
-		$content = elgg_view_entity($page);
-		$body = elgg_view_layout($page->getLayout(), array(
-			'content' => $content,
-			'title' => $page->title,
-		));
-		echo elgg_view_page($page->title, $body);
-		exit;
-	}
+/**
+ * /anypage handler
+ *
+ * @param array $segments URL segments
+ * @return bool
+ */
+function anypage_page_handler($segments) {
+
+	$path = AnyPage::normalizePath(implode('/', $segments));
+
+	echo elgg_view_resource('anypage', [
+		'path' => $path,
+	]);
+	
+	return true;
 }
 
 /**
  * Prepare form variables for page edit form.
  *
- * @param mixed $page
+ * @param AnyPage $page Page instance
+ * @param array   $vars View vars
  * @return array
  */
-function anypage_prepare_form_vars($page = null) {
+function anypage_prepare_form_vars($page = null, array $vars = []) {
 	$values = array(
 		'title' => '',
 		'page_path' => '',
@@ -122,9 +131,12 @@ function anypage_prepare_form_vars($page = null) {
 		'layout' => 'one_column',
 		'guid' => null,
 		'entity' => $page,
+		'unsafe_html' => false,
 	);
 
-	if ($page) {
+	$values = array_merge($values, $vars);
+	
+	if ($page instanceof AnyPage) {
 		foreach (array_keys($values) as $field) {
 			if (isset($page->$field)) {
 				$values[$field] = $page->$field;
@@ -189,6 +201,43 @@ function anypage_prepare_footer_menu($hook, $type, $value, $params) {
 	}
 
 	return $value;
+}
+
+/**
+ * Setup entity menu
+ *
+ * @param string         $hook   "register"
+ * @param string         $type   "menu:entity"
+ * @param ElggMenuItem[] $return Menu
+ * @param array          $params Hook params
+ * @return ElggMenuItem[]
+ */
+function anypage_entity_menu_setup($hook, $type, $return, $params) {
+
+	$entity = elgg_extract('entity', $params);
+	if (!$entity instanceof AnyPage) {
+		return;
+	}
+
+	if ($entity->canEdit()) {
+		$return[] = ElggMenuItem::factory([
+					'name' => 'edit',
+					'text' => elgg_echo('edit'),
+					'href' => "admin/appearance/anypage/edit?guid=$entity->guid",
+		]);
+	}
+
+	if ($entity->canDelete()) {
+		$return[] = ElggMenuItem::factory([
+			'name' => 'delete',
+			'text' => elgg_echo('delete'),
+			'confirm' => true,
+			'is_action' => true,
+			'href' => "action/entity/delete?guid=$entity->guid",
+		]);
+	}
+
+	return $return;
 }
 
 /**

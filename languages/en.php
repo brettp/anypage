@@ -4,9 +4,11 @@
  */
 
 return array(
-	'admin:appearance:anypage' => 'AnyPage Pages',
+	'admin:appearance:anypage' => 'Static Pages',
 	'admin:appearance:anypage:new' => 'New Page',
-	'item:object:anypage' => 'Anypages',
+	'admin:appearance:anypage:edit' => 'Edit Page',
+	
+	'item:object:anypage' => 'Static pages',
 
 	'anypage:warning' => 'Warning',
 	'anypage:unsupported_page_handler_character' => "This path uses a character that is unsupported "
@@ -34,11 +36,12 @@ return array(
 	'anypage:view_info' => 'This page will use the following view:',
 	'anypage:body' => 'Page body',
 	'anypage:visible_through_walled_garden' => 'Visible through Walled Garden',
-	'anypage:visible_through_walled_garden:disabled' => 'Visible through Walled Garden (Walled Garden is not enabled)',
+	'anypage:walled_garden_disabled' => 'Walled Garden is not enabled',
 	'anypage:requires_login' => 'Requires login',
 	'anypage:show_in_footer' => 'Add a link in the site footer',
 	'anypage:layout' => 'Layout',
-	'anypage:layout:help' => '(See the readme file for more information)',
+	'anypage:unsafe_html' => 'Disable HTML filtering and validation',
+	'anypage:unsafe_html:help' => 'Do not use this option if you are copying HTML content from an untrusted source! HTML filtering keeps your site secure by preventing cross-site scripting injections and ensures HTML validity. You may sometime need to resort to this option, if you are embedding, for example, a Google Calendar or a YouTube video.',
 
 	'anypage:use_view' => 'Display a custom view',
 	'anypage:use_editor' => 'Use an editor to write this page',
