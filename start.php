@@ -4,10 +4,12 @@
  * Anypage
  */
 elgg_register_event_handler('init', 'system', 'anypage_init');
+elgg_register_event_handler('ready', 'system', 'anypage_ready');
 elgg_register_plugin_hook_handler('route:rewrite', 'all', 'anypage_router');
 
 /**
  * Anypage init
+ * @return void
  */
 function anypage_init() {
 	elgg_register_admin_menu_item('configure', 'anypage', 'appearance');
@@ -25,12 +27,22 @@ function anypage_init() {
 
 	elgg_register_event_handler('upgrade', 'system', 'anypage_upgrader');
 
-	// add marked pages to footer menu
-	elgg_register_plugin_hook_handler('register', 'menu:footer', 'anypage_prepare_footer_menu');
-
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'anypage_entity_menu_setup');
 
 	elgg_register_page_handler('anypage', 'anypage_page_handler');
+
+}
+
+/**
+ * Setup menus when system is ready
+ * @return void
+ */
+function anypage_ready() {
+
+	$menus = anypage_get_supported_menus();
+	foreach ($menus as $menu) {
+		elgg_register_plugin_hook_handler('register', "menu:$menu", 'anypage_prepare_menu');
+	}
 
 }
 
@@ -127,11 +139,13 @@ function anypage_prepare_form_vars($page = null, array $vars = []) {
 		'render_type' => 'html',
 		'visible_through_walled_garden' => false,
 		'requires_login' => false,
-		'show_in_footer' => false,
 		'layout' => 'one_column',
 		'guid' => null,
 		'entity' => $page,
 		'unsafe_html' => false,
+		'menu_name' => '',
+		'menu_section' => '',
+		'menu_parent' => '',
 	);
 
 	$values = array_merge($values, $vars);
@@ -180,27 +194,41 @@ function anypage_walled_garden_public_pages($hook, $type, $value, $params) {
 }
 
 /**
- * Add links to any registered pages to the footer menu.
+ * Add links to any registered pages to the menu.
  *
- * @param type $hook
- * @param type $type
- * @param type $value
- * @param type $params
+ * @param string         $hook   "register"
+ * @param string         $type   "menu:<menu_name>"
+ * @param ElggMenuItem[] $return Menu
+ * @param array          $params Hook params
+ * @return ElggMenuItem[]
  */
-function anypage_prepare_footer_menu($hook, $type, $value, $params) {
+function anypage_prepare_menu($hook, $type, $return, $params) {
+
+	list($prefix, $menu_name) = explode(':', $type);
+	if ($prefix !== 'menu') {
+		return;
+	}
+
 	$pages = elgg_get_entities_from_metadata(array(
 		'type' => 'object',
 		'subtype' => 'anypage',
-		'metadata_name' => 'show_in_footer',
-		'metadata_value' => true
+		'metadata_name' => 'menu_name',
+		'metadata_value' => $menu_name,
+		'limit' => 0,
+		'batch' => true,
 	));
 
 	foreach ($pages as $page) {
-		$item = new ElggMenuItem($page->guid, $page->title, $page->getURL());
-		$value[] = $item;
+		$return[] = ElggMenuItem::factory([
+			'name' => "anypage:$page->guid",
+			'text' => $page->getDisplayName(),
+			'href' => $page->getURL(),
+			'section' => $page->menu_section ? : 'default',
+			'parent_name' => $page->menu_parent ? : null,
+		]);
 	}
 
-	return $value;
+	return $return;
 }
 
 /**
@@ -284,4 +312,18 @@ function anypage_needs_upgrade() {
 	}
 
 	return $version > $db_version;
+}
+
+/**
+ * Returns a list of menus that page links can be added to
+ * @return array
+ */
+function anypage_get_supported_menus() {
+
+	$menus = [
+		'site',
+		'footer',
+	];
+
+	return elgg_trigger_plugin_hook('menus', 'anypage', null, $menus);
 }

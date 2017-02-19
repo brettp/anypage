@@ -181,7 +181,12 @@ class AnyPage extends ElggObject {
 	 * @return bool
 	 */
 	public function setShowInFooter($show = false) {
-		return $this->show_in_footer = $show;
+		if ($show) {
+			$this->setMenuItem('footer', 'default');
+		} else {
+			$this->setMenuItem();
+		}
+		return true;
 	}
 
 	/**
@@ -190,7 +195,22 @@ class AnyPage extends ElggObject {
 	 * @return type bool
 	 */
 	public function showInFooter() {
-		return $this->show_in_footer;
+		return $this->menu_name == 'footer';
+	}
+
+	/**
+	 * Add a menu item linking to this page
+	 * 
+	 * @param string $menu_name    Menu name
+	 * @param string $menu_section Menu section
+	 * @param string $menu_parent  Parent item name
+	 * @return bool
+	 */
+	public function setMenuItem($menu_name = '', $menu_section = '', $menu_parent = '') {
+		$this->menu_name = $menu_name;
+		$this->menu_section = $menu_section;
+		$this->menu_parent = $menu_parent;
+		return true;
 	}
 
 	/**

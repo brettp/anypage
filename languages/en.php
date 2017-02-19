@@ -38,7 +38,6 @@ return array(
 	'anypage:visible_through_walled_garden' => 'Visible through Walled Garden',
 	'anypage:walled_garden_disabled' => 'Walled Garden is not enabled',
 	'anypage:requires_login' => 'Requires login',
-	'anypage:show_in_footer' => 'Add a link in the site footer',
 	'anypage:layout' => 'Layout',
 	'anypage:unsafe_html' => 'Disable HTML filtering and validation',
 	'anypage:unsafe_html:help' => 'Do not use this option if you are copying HTML content from an untrusted source! HTML filtering keeps your site secure by preventing cross-site scripting injections and ensures HTML validity. You may sometime need to resort to this option, if you are embedding, for example, a Google Calendar or a YouTube video.',
@@ -64,4 +63,9 @@ return array(
 	'anypage:test_page_view' => 'This is an example of a page rendered by AnyPage using a view!',
 
 	'anypage:activate:admin_notice' => 'AnyPage has added example pages. Use the <a href="%s">admin interface</a> to add more pages.',
+
+	'anypage:menu_item' => 'Add a menu item',
+	'anypage:menu_name' => 'Menu name',
+	'anypage:menu_section' => 'Menu section',
+	'anypage:menu_parent' => 'Parent item name',
 );

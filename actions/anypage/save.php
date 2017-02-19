@@ -11,7 +11,9 @@ $description = get_input('description', null, $filter_html);
 $render_type = get_input('render_type');
 $visible_through_walled_garden = get_input('visible_through_walled_garden', false);
 $requires_login = get_input('requires_login', false);
-$show_in_footer = get_input('show_in_footer', false);
+$menu_name = get_input('menu_name', '');
+$menu_section = get_input('menu_section', '');
+$menu_parent = get_input('menu_parent', '');
 $layout = get_input('layout', 'one_column');
 $guid = get_input('guid');
 
@@ -56,7 +58,7 @@ $page->description = $description;
 $page->setRenderType($render_type);
 $page->setRequiresLogin($requires_login);
 $page->setVisibleThroughWalledGarden($visible_through_walled_garden);
-$page->setShowInFooter($show_in_footer);
+$page->setMenuItem($menu_name, $menu_section, $menu_parent);
 $page->setLayout($layout);
 $page->unsafe_html = $unsafe_html;
 

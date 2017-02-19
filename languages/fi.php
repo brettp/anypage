@@ -31,7 +31,6 @@ return array(
 	'anypage:visible_through_walled_garden' => 'Nähtävissä, kun Walled Garden -ominaisuus on päällä',
 	'anypage:walled_garden_disabled' => 'Walled Garden ei ole käytössä',
 	'anypage:requires_login' => 'Näytä vain kirjautuneille',
-	'anypage:show_in_footer' => 'Lisää linkki sivuston footeriin',
 	'anypage:layout' => 'Layout',
 
 	'anypage:use_view' => 'Käytä järjestelmän sisäistä näkymää',

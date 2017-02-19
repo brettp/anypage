@@ -90,13 +90,37 @@ if (elgg_get_config('walled_garden')) {
 	]);
 }
 
-echo elgg_view_field([
-	'#type' => 'checkbox',
-	'label' => elgg_echo('anypage:show_in_footer'),
-	'name' => 'show_in_footer',
-	'value' => 1,
-	'checked' => $values['show_in_footer'],
-]);
+
+$menus = anypage_get_supported_menus();
+if ($menus) {
+	array_unshift($menus, '');
+	echo elgg_view_field([
+		'#type' => 'fieldset',
+		'#label' => elgg_echo('anypage:menu_item'),
+		'align' => 'horizontal',
+		'fields' => [
+			[
+				'#type' => 'select',
+				'#label' => elgg_echo('anypage:menu_name'),
+				'options' => $menus,
+				'name' => 'menu_name',
+				'value' => $values['menu_name'],
+			],
+			[
+				'#type' => 'text',
+				'#label' => elgg_echo('anypage:menu_section'),
+				'name' => 'menu_section',
+				'value' => $values['menu_section'],
+			],
+			[
+				'#type' => 'text',
+				'#label' => elgg_echo('anypage:menu_parent'),
+				'name' => 'menu_parent',
+				'value' => $values['menu_parent'],
+			],
+		],
+	]);
+}
 
 echo elgg_view_field([
 	'#type' => 'select',
