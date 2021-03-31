@@ -129,6 +129,7 @@ function anypage_prepare_form_vars($page = null) {
 		'visible_through_walled_garden' => false,
 		'requires_login' => false,
 		'show_in_footer' => false,
+		'allow_unsafe_content' => false,
 		'layout' => 'one_column',
 		'guid' => null,
 		'entity' => $page,

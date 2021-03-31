@@ -8,7 +8,7 @@
  *
  */
 class AnyPage extends ElggObject {
-	const ANYPAGE_EXPORT_VERSION = 1;
+	const ANYPAGE_EXPORT_VERSION = 2;
 
 	private $renderTypes = [
 		'view',
@@ -552,5 +552,13 @@ class AnyPage extends ElggObject {
 
 	public static function getUnfriendlyTitle($title) {
 		return ucwords(str_replace(['-', '_'], ' ', $title));
+	}
+
+	public function setAllowUnsafeContent($allow) {
+		return $this->allow_unsafe_content = $allow;
+	}
+
+	public function getAllowUnsafeContent() {
+		return $this->allow_unsafe_content;
 	}
 }

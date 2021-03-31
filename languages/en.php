@@ -40,6 +40,8 @@ return [
 	'anypage:visible_through_walled_garden:disabled' => 'Visible through Walled Garden (Walled Garden is not enabled)',
 	'anypage:requires_login' => 'Requires login',
 	'anypage:show_in_footer' => 'Add a link in the site footer',
+	'anypage:allow_unsafe_content' => 'Allow potentially unsafe content?',
+	'anypage:allow_unsafe_content:help' => 'This allows more customizations, but disables internal filters that remove unsafe CSS and JS. Works best in raw HTML or custom view mode. Use carefully!',
 	'anypage:layout' => 'Layout',
 	'anypage:layout:help' => '(See the readme file for more information)',
 

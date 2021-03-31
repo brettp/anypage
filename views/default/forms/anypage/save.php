@@ -22,6 +22,8 @@ if ($is_walled_garden) {
 
 $show_in_footer_check = $show_in_footer ? 'checked="checked"' : '';
 
+$allow_unsafe_content_check = $allow_unsafe_content ? 'checked="checked"' : '';
+
 $layout_options = AnyPage::getLayoutOptions();
 
 ?>
@@ -97,6 +99,19 @@ $layout_options = AnyPage::getLayoutOptions();
 		<?php
 		echo elgg_echo('anypage:show_in_footer');
 		?>
+	</label>
+</div>
+
+<div>
+	<label>
+		<input type="checkbox" name="allow_unsafe_content" value="1" <?php echo $allow_unsafe_content_check; ?> />
+		<?php
+		echo elgg_echo('anypage:allow_unsafe_content');
+		?>
+
+		<span class="elgg-text-help elgg-quiet">
+			<?php echo elgg_echo('anypage:allow_unsafe_content:help'); ?>
+		</span>
 	</label>
 </div>
 

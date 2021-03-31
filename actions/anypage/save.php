@@ -10,6 +10,7 @@ $render_type = get_input('render_type');
 $visible_through_walled_garden = get_input('visible_through_walled_garden', false);
 $requires_login = get_input('requires_login', false);
 $show_in_footer = get_input('show_in_footer', false);
+$allow_unsafe = get_input('allow_unsafe_content', false);
 $layout = get_input('layout', 'one_column');
 $guid = get_input('guid');
 
@@ -66,6 +67,7 @@ if ($guid == 0) {
 	}
 }
 
+/* @var Page \AnyPage */
 $page->setPagePath($page_path);
 $page->title = $title;
 $page->description = $description;
@@ -74,6 +76,7 @@ $page->setRequiresLogin($requires_login);
 $page->setVisibleThroughWalledGarden($visible_through_walled_garden);
 $page->setShowInFooter($show_in_footer);
 $page->setLayout($layout);
+$page->setAllowUnsafeContent($allow_unsafe);
 
 if ($page->save()) {
 	elgg_clear_sticky_form('anypage');
